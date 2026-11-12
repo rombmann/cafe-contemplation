@@ -148,7 +148,8 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 .stream{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;display:none}
 .pour-on .stream{display:block}
 .s-milk{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round}
-.s-shadow{fill:none;stroke:rgba(39,78,114,.26);stroke-width:8;stroke-linecap:round;filter:blur(1.5px)}
+.s-shadow{fill:none;stroke:rgba(39,78,114,.2);stroke-width:8.5;stroke-linecap:round}
+.pitcher{will-change:transform}
 .pour-on #menu li{opacity:.14;transition:opacity .6s ease}
 .pour-on #menu li.wet{opacity:1}
 .pour-end{display:grid;grid-template-columns:190px 1fr;gap:30px;align-items:center;padding-left:calc((100% - 88px)/3 + 22px - 95px)}
@@ -810,8 +811,12 @@ function zurichNow(){
   var SPOUT = { x: 0.2, y: 0.685 };       // position du bec dans l'image du pot (0 à 1), image non retournée
   var FILL = 260, TAIL = 150;                 // distance de défilement (px) pour remplir la tasse, puis tarir le filet
 
+  var FPS = 24;                               // images par seconde de la vidéo de la tasse
+  var SMOOTH = 85;                            // ms : inertie du filet (plus grand = plus « liquide », mais plus en retard)
+
   var paths = svg.querySelectorAll("path"), milk = paths[1], rows = [];
-  var H = 0, S2 = 1, len = 0, top0 = 0, tick = false, vReady = false, vAsked = false, target = 0, shown = -1, raf = 0;
+  var H = 0, len = 0, top0 = 0, zoneY = 0, cupH = 0, vReady = false, vAsked = false, target = 0;
+  var goal = 0, cur = null, loop = 0, lastT = 0;
   document.documentElement.classList.add("pour-on");
   cup.poster = "visuels/latte-debut.webp";
 
@@ -823,17 +828,14 @@ function zurichNow(){
       var pr = cup.play();                      // amorce l'affichage des images sur mobile, puis pause
       if (pr && pr.then) pr.then(function(){ cup.pause(); seek(); }).catch(function(){ seek(); }); else { cup.pause(); seek(); }
     });
-    cup.addEventListener("error", function(){ vReady = false; LATTE_VIDEO = ""; update(); });
+    cup.addEventListener("seeked", seek);       // une seule recherche à la fois : la suivante part quand l'image est prête
+    cup.addEventListener("error", function(){ vReady = false; LATTE_VIDEO = ""; render(cur || 0); });
     cup.load();
   }
-  function seek(){                              // rapproche en douceur l'image affichée de l'image voulue
-    raf = 0;
-    if (!vReady) return;
-    if (shown < 0) shown = cup.currentTime || 0;
-    var diff = target - shown;
-    if (Math.abs(diff) < 0.015){ shown = target; } else { shown += diff * 0.3; }
-    if (!cup.seeking || Math.abs(diff) < 0.015){ try { cup.currentTime = Math.max(0, shown); } catch (e) {} }
-    if (shown !== target) raf = requestAnimationFrame(seek);
+  function seek(){
+    if (!vReady || cup.seeking) return;
+    var t = (Math.round(target * FPS) + 0.1) / FPS;   // vise le milieu d'une image : pas de recherche inutile
+    if (Math.abs(cup.currentTime - t) > 0.5 / FPS){ try { cup.currentTime = t; } catch (e) {} }
   }
 
   function layout(){
@@ -863,17 +865,30 @@ function zurichNow(){
     else d += " L" + xc + " " + H;
     paths.forEach(function(p){ p.setAttribute("d", d); });
     len = milk.getTotalLength();
-    S2 = (H - top0) + Math.max(0, br.height - window.innerHeight * 0.2);   // le filet touche la tasse quand elle est bien visible
+    zoneY = zr.top + window.scrollY; cupH = br.height;
     rows = [].map.call(document.querySelectorAll("#menu li"), function(li){
-      var r = li.getBoundingClientRect(); return { el: li, y: r.top - zr.top + r.height / 2 };
+      var r = li.getBoundingClientRect(); return { el: li, y: r.top - zr.top + r.height / 2, done: li.classList.contains("wet") };
     });
-    update();
+    goal = measure(); cur = goal; render(cur);
   }
 
-  function update(){
-    tick = false;
-    var zr = zone.getBoundingClientRect();
-    var S = window.innerHeight * 0.72 - (zr.top + top0);          // avancée du défilement depuis le bec
+  // Avancée du défilement depuis le bec, sans relire la mise en page à chaque image
+  function measure(){ return window.innerHeight * 0.72 - (zoneY - window.scrollY + top0); }
+
+  // Le filet rattrape le défilement en douceur : plus d'à-coups à la molette ni au doigt
+  function frame(now){
+    loop = 0;
+    if (!isFinite(now)) now = performance.now();
+    var dt = Math.max(0, Math.min(64, now - lastT)); lastT = now;
+    if (cur === null || !isFinite(cur)) cur = goal;
+    cur += (goal - cur) * (1 - Math.exp(-dt / SMOOTH));
+    if (Math.abs(goal - cur) < 0.4) cur = goal;
+    render(cur);
+    if (cur !== goal) loop = requestAnimationFrame(frame);
+  }
+
+  function render(S){
+    var S2 = (H - top0) + Math.max(0, cupH - window.innerHeight * 0.2);   // le filet touche la tasse quand elle est bien visible
     var p = Math.max(0, Math.min(1, S / S2));                      // 1. le filet descend
     var q = Math.max(0, Math.min(1, (S - S2) / FILL));             // 2. la tasse se remplit
     var r = Math.max(0, Math.min(1, (S - S2 - FILL) / TAIL));      // 3. le filet se tarit
@@ -886,18 +901,27 @@ function zurichNow(){
     var flip = !!pitcher.dataset.flip, tx = +pitcher.dataset.tx || 0, ty = +pitcher.dataset.ty || 0;
     pitcher.style.transform = "translate(" + tx + "px," + ty + "px) rotate(" + (tilt * 16 * (flip ? -1 : 1)) + "deg) translate(" + (-tx) + "px," + (-ty) + "px)" + (flip ? " scaleX(-1)" : "");   // pivote autour du bec
     var front = top0 + p * (H - top0);
-    rows.forEach(function(w){ if (front >= w.y) w.el.classList.add("wet"); });
+    rows.forEach(function(w){ if (!w.done && front >= w.y){ w.done = true; w.el.classList.add("wet"); } });
     if (S > -window.innerHeight) loadVideo();                       // charge la vidéo un écran avant d'en avoir besoin
     if (LATTE_VIDEO){
       target = q * VIDEO_FILL_END + r * (VIDEO_END - VIDEO_FILL_END);
-      if (vReady && !raf) raf = requestAnimationFrame(seek);
+      seek();
     } else {
-      cup.poster = q > 0.5 ? "visuels/latte-fin.webp" : "visuels/latte-debut.webp";
+      var poster = q > 0.5 ? "visuels/latte-fin.webp" : "visuels/latte-debut.webp";
+      if (cup.getAttribute("poster") !== poster) cup.poster = poster;
     }
   }
-  function ask(){ if (!tick){ tick = true; requestAnimationFrame(update); } }
+  function ask(){
+    goal = measure();
+    if (!loop){ lastT = performance.now(); loop = requestAnimationFrame(frame); }
+  }
   window.addEventListener("scroll", ask, { passive: true });
-  window.addEventListener("resize", layout);
+  // Sur iPhone, la barre de Safari change la hauteur en défilant : on ne recalcule tout que si la largeur change.
+  var lastW = window.innerWidth, rz = 0;
+  window.addEventListener("resize", function(){
+    clearTimeout(rz);
+    rz = setTimeout(function(){ if (window.innerWidth !== lastW){ lastW = window.innerWidth; layout(); } else ask(); }, 120);
+  });
   window.addEventListener("load", layout);
   pitcher.addEventListener("load", layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
