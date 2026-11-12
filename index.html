@@ -6,15 +6,25 @@
 <title>Café Contemplation · Café de spécialité à Ouchy, Lausanne</title>
 <meta name="description" content="Café Contemplation : café de spécialité, matcha et douceurs maison à Ouchy, à deux pas du lac Léman. Avenue d'Ouchy 76, 1006 Lausanne. Ouvert du mercredi au dimanche.">
 <meta name="theme-color" content="#274E72">
-<!-- À CONFIRMER : domaine définitif. Ces deux adresses ne servent qu'à préparer la mise en ligne. -->
-<link rel="canonical" href="https://www.cafecontemplation.ch/">
-<meta property="og:url" content="https://www.cafecontemplation.ch/">
+<!-- ADRESSE DU SITE : version de test sur GitHub Pages.
+     Au passage sur le domaine définitif (cafecontemplation.ch ?), remplacer
+     https://rombmann.github.io/cafe-contemplation/ par la nouvelle adresse dans les 4 lignes ci-dessous. -->
+<link rel="canonical" href="https://rombmann.github.io/cafe-contemplation/">
+<meta property="og:url" content="https://rombmann.github.io/cafe-contemplation/">
+<meta property="og:image" content="https://rombmann.github.io/cafe-contemplation/visuels/partage.jpg">
+<meta name="twitter:image" content="https://rombmann.github.io/cafe-contemplation/visuels/partage.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="La devanture du Café Contemplation, avenue d'Ouchy 76 à Lausanne">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_CH">
 <meta property="og:site_name" content="Café Contemplation">
 <meta property="og:title" content="Café Contemplation · Café de spécialité à Ouchy, Lausanne">
 <meta property="og:description" content="Café de spécialité, matcha et douceurs maison à Ouchy, à deux pas du lac Léman.">
-<meta property="og:image" content="visuels/partage.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="visuels/icone-180.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Contemplation">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%234F82AD'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' font-weight='700' text-anchor='middle' fill='%23FBF8F1'%3EC%3C/text%3E%3C/svg%3E">
 <link rel="preload" as="image" href="visuels/poster.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -218,6 +228,27 @@ tr.today th::before{content:"→ ";}
 .info .btn.line{color:var(--paper);border-color:rgba(255,255,255,.7)}
 .info .btn.line:hover{background:rgba(255,255,255,.12)}
 .info .plain{font-size:15px;opacity:.92}
+.contact{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.contact a{display:flex;align-items:center;gap:12px;min-height:48px;margin-left:-6px;padding:4px 14px 4px 6px;border-radius:14px;text-decoration:none;width:fit-content;transition:background .2s}
+.contact a:hover{background:rgba(255,255,255,.09)}
+.contact a span{text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(255,255,255,.35)}
+.contact svg{width:38px;height:38px;padding:9px;border-radius:50%;background:rgba(255,255,255,.1);flex:none}
+
+/* Carte (chargée au clic) */
+.map{position:relative;margin-top:48px;height:340px;border-radius:18px;overflow:hidden;background:#1d3e5c;box-shadow:0 20px 40px -24px rgba(0,0,0,.5)}
+.map-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
+.map::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,24,33,.35),rgba(15,24,33,.72));pointer-events:none}
+.map-cover{position:relative;z-index:1;height:100%;display:grid;place-content:center;justify-items:center;gap:12px;padding:20px;text-align:center}
+.map-addr{margin:0;font-family:var(--display);font-size:clamp(20px,2.4vw,26px);font-weight:600;color:#fff}
+.map-note{margin:0;font-size:13px;color:rgba(255,255,255,.8)}
+.map iframe{position:absolute;inset:0;z-index:2;width:100%;height:100%;border:0;background:#e9e5dc}
+.map.on::after,.map.on .map-cover{display:none}
+
+/* Invitation à défiler (grand écran) */
+.scroll-cue{position:absolute;left:50%;bottom:16px;z-index:2;width:44px;height:44px;margin-left:-22px;display:grid;place-items:center;color:#fff;opacity:.75;border-radius:50%;animation:cue 2.4s ease-in-out infinite}
+.scroll-cue:hover{opacity:1}
+.scroll-cue svg{width:26px;height:26px}
+@keyframes cue{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
 /* Footer */
 footer{padding:36px 0 44px;font-size:14px;color:var(--stone)}
@@ -290,6 +321,8 @@ footer .brand{align-items:flex-start}
   .pour-end{grid-template-columns:1fr;gap:10px;padding-left:0}
   .cup{width:150px}
   .info,.quotes{grid-template-columns:1fr}
+  .map{height:260px;margin-top:36px}
+  .scroll-cue{display:none}
   .info{gap:34px}
   .sweets{margin-top:36px}
   .sweets img{aspect-ratio:4/3}
@@ -347,6 +380,7 @@ footer .brand{align-items:flex-start}
         <a class="btn ghost" data-href="tel">Appeler</a>
       </div>
     </div>
+    <a class="scroll-cue" href="#histoire" aria-label="Défiler vers la suite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
     <button class="film-btn" id="film-btn" type="button" aria-pressed="false" title="Lire la vidéo">
       <i aria-hidden="true"><svg viewBox="0 0 14 14" fill="currentColor"><path id="film-icon" d="M3 2l9 5-9 5z"/></svg></i>
       <span class="sr" id="film-label">Lire la vidéo</span>
@@ -486,14 +520,21 @@ footer .brand{align-items:flex-start}
         </div>
         <div>
           <h3>Contact</h3>
-          <p><a data-href="tel" data-text="phoneDisplay"></a></p>
-          <p><a data-href="mailto" data-text="email"></a></p>
-          <p><a data-href="instagram" target="_blank" rel="noopener" data-text="instagramHandle"></a></p>
-          <div class="stack">
-            <a class="btn line" data-href="tel">Appeler</a>
-            <a class="btn line" data-href="mailto">Envoyer un e-mail</a>
-            <a class="btn line" data-href="instagram" target="_blank" rel="noopener">Voir Instagram</a>
-          </div>
+          <ul class="contact">
+            <li><a data-href="tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/></svg><span data-text="phoneDisplay"></span></a></li>
+            <li><a data-href="mailto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg><span data-text="email"></span></a></li>
+            <li><a data-href="instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg><span data-text="instagramHandle"></span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Carte : chargée depuis Google Maps seulement au clic (rien n'est envoyé à Google avant). -->
+      <div class="map" id="map">
+        <img class="map-bg" src="visuels/facade.webp" width="1400" height="782" loading="lazy" decoding="async" alt="">
+        <div class="map-cover">
+          <p class="map-addr"><span data-text="street"></span> · <span data-text="city"></span></p>
+          <button class="btn light" type="button" id="map-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Afficher la carte</button>
+          <p class="map-note">La carte est chargée depuis Google Maps, seulement si vous cliquez.</p>
         </div>
       </div>
     </div>
@@ -694,6 +735,23 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
   document.querySelectorAll('a[data-href="tel"].btn, .dock a[data-href="tel"]').forEach(function(e){ e.setAttribute("aria-label", "Appeler le " + c.phoneDisplay); });
   document.querySelectorAll('a.score').forEach(function(e){ e.setAttribute("aria-label", text.ratingLine + ". Voir la fiche Google"); });
   document.getElementById("year").textContent = new Date().getFullYear();
+})();
+
+/* ---------- Carte géographique (Horaires & accès) : Google Maps n'est contacté qu'au clic ---------- */
+(function mapOnClick(){
+  var box = document.getElementById("map"), btn = document.getElementById("map-btn");
+  if (!box || !btn) return;
+  var c = SITE_DATA.contact;
+  var q = SITE_DATA.name + ", " + c.street + ", " + c.postalCode + " " + c.city;
+  btn.addEventListener("click", function(){
+    var f = document.createElement("iframe");
+    f.src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=16&output=embed";
+    f.title = "Carte : " + q;
+    f.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
+    f.setAttribute("allowfullscreen", "");
+    box.appendChild(f); box.classList.add("on");
+    f.focus();
+  });
 })();
 
 /* ---------- Carte ---------- */
