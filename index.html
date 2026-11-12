@@ -101,6 +101,15 @@ nav a.nav-cta:hover{text-decoration:none;background:rgba(127,127,127,.16)}
 .burger{display:none;width:46px;height:46px;border:0;background:transparent;color:inherit;cursor:pointer;border-radius:10px;align-items:center;justify-content:center}
 .burger svg{width:26px;height:26px}
 
+/* Choix de la langue (FR / EN) */
+nav{order:1;margin-left:auto}
+.lang{order:2;flex:none;display:flex;align-items:center;gap:2px;padding:3px;border-radius:999px;border:1.5px solid currentColor}
+.lang button{min-width:38px;min-height:34px;padding:0 9px;border:0;border-radius:999px;background:transparent;color:inherit;font:600 13px var(--body);letter-spacing:.06em;cursor:pointer;transition:background .2s,color .2s}
+.lang button:not([aria-pressed="true"]):hover{background:rgba(127,127,127,.22)}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--blue-deep)}
+header.solid .lang button[aria-pressed="true"],header.open .lang button[aria-pressed="true"]{background:var(--blue-deep);color:var(--paper)}
+.burger{order:3}
+
 /* Hero: the film is the whole first screen, the words sit on it */
 .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;background:var(--blue-deep) url("visuels/poster.webp") center/cover no-repeat;color:#fff;overflow:hidden}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -328,6 +337,7 @@ footer .brand{align-items:flex-start}
   body{font-size:16.5px}
   section{padding:56px 0}
   .burger{display:inline-flex}
+  .lang{margin-left:auto}
   nav{position:absolute;left:0;right:0;top:100%;background:var(--wall);border-bottom:1px solid var(--line);display:none;box-shadow:0 18px 30px rgba(15,24,33,.14)}
   header.open nav{display:block}
   nav ul{flex-direction:column;align-items:stretch;gap:0;padding:8px 20px 18px}
@@ -380,22 +390,27 @@ footer .brand{align-items:flex-start}
 </style>
 </head>
 <body>
-<a class="skip" href="#contenu">Aller au contenu</a>
+<a class="skip" href="#contenu" data-i18n="skip">Aller au contenu</a>
 
 <header id="header">
   <div class="wrap bar">
-    <a class="brand" href="#top" aria-label="Café Contemplation, retour en haut de page"><b>CAFÉ</b><span>Contemplation</span></a>
+    <a class="brand" href="#top" aria-label="Café Contemplation, retour en haut de page" data-i18n-attr="aria-label:brandHome"><b>CAFÉ</b><span>Contemplation</span></a>
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu de navigation">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path id="burger-path" d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <nav id="nav" aria-label="Navigation principale">
+    <nav id="nav" aria-label="Navigation principale" data-i18n-attr="aria-label:navMain">
       <ul>
-        <li><a href="#histoire">Le café</a></li>
-        <li><a href="#carte">La carte</a></li>
-        <li><a href="#infos">Horaires &amp; accès</a></li>
-        <li><a class="nav-cta" data-href="directions" target="_blank" rel="noopener">Itinéraire</a></li>
+        <li><a href="#histoire" data-i18n="navCafe">Le café</a></li>
+        <li><a href="#carte" data-i18n="navMenu">La carte</a></li>
+        <li><a href="#infos" data-i18n="navInfos">Horaires &amp; accès</a></li>
+        <li><a class="nav-cta" data-href="directions" target="_blank" rel="noopener" data-i18n="navDirections">Itinéraire</a></li>
       </ul>
     </nav>
+    <!-- Langue : français / anglais (textes anglais dans le bloc « TEXTES EN ANGLAIS » du script) -->
+    <div class="lang" role="group" aria-label="Langue · Language">
+      <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="Français">FR</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+    </div>
   </div>
 </header>
 
@@ -407,16 +422,16 @@ footer .brand{align-items:flex-start}
       <p class="status" id="status" role="status" aria-live="polite" data-state="closed" style="margin:0"><span class="dot" aria-hidden="true"></span><span data-status-text>Horaires ci-dessous</span></p>
       <p class="notice" data-notice hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span></span></p>
       <!-- TEXTE : titre et sous-titre de l'accueil -->
-      <h1>Une pause au bord du lac, <em>le temps d'un café.</em></h1>
-      <p class="lede">Café de spécialité, matcha et douceurs maison à Ouchy, à deux pas du lac Léman à Lausanne.</p>
+      <h1 data-i18n="heroTitle">Une pause au bord du lac, <em>le temps d'un café.</em></h1>
+      <p class="lede" data-i18n="heroLede">Café de spécialité, matcha et douceurs maison à Ouchy, à deux pas du lac Léman à Lausanne.</p>
       <p class="where"><span data-text="addressLine"></span></p>
       <div class="cta">
-        <a class="btn light" href="#carte">Voir la carte</a>
-        <a class="btn ghost" data-href="directions" target="_blank" rel="noopener">Ouvrir l'itinéraire</a>
-        <a class="btn ghost" data-href="tel">Appeler</a>
+        <a class="btn light" href="#carte" data-i18n="ctaMenu">Voir la carte</a>
+        <a class="btn ghost" data-href="directions" target="_blank" rel="noopener" data-i18n="ctaDirections">Ouvrir l'itinéraire</a>
+        <a class="btn ghost" data-href="tel" data-i18n="ctaCall">Appeler</a>
       </div>
     </div>
-    <a class="scroll-cue" href="#histoire" aria-label="Défiler vers la suite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+    <a class="scroll-cue" href="#histoire" aria-label="Défiler vers la suite" data-i18n-attr="aria-label:scrollCue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
     <button class="film-btn" id="film-btn" type="button" aria-pressed="false" title="Lire la vidéo">
       <i aria-hidden="true"><svg viewBox="0 0 14 14" fill="currentColor"><path id="film-icon" d="M3 2l9 5-9 5z"/></svg></i>
       <span class="sr" id="film-label">Lire la vidéo</span>
@@ -427,12 +442,12 @@ footer .brand{align-items:flex-start}
   <section id="histoire" aria-labelledby="h-histoire">
     <div class="wrap story">
       <div class="story-text">
-        <p class="kicker">Le café</p>
-        <h2 id="h-histoire">D'un triporteur à Genève à une arcade à Ouchy</h2>
-        <!-- TEXTE : histoire du café -->
-        <p>Tout a commencé en 2024 avec un coffee truck à Genève. En 2026, Adéla et Lloyd Arrigoni ont posé leurs tasses avenue d'Ouchy, dans une petite arcade claire : murs crème, comptoir en terrazzo, tables bleues et une dizaine de places.</p>
-        <p>Lloyd est derrière la machine, Adéla aux fourneaux, et Joey, le Boston Terrier de la maison, supervise l'ensemble.</p>
-        <p>On vient pour un flat white à emporter avant la baignade, ou pour s'asseoir et ne rien faire pendant un quart d'heure.</p>
+        <p class="kicker" data-i18n="storyKicker">Le café</p>
+        <h2 id="h-histoire" data-i18n="storyTitle">D'un triporteur à Genève à une arcade à Ouchy</h2>
+        <!-- TEXTE : histoire du café (version anglaise : clés storyP1 à storyP3 dans « TEXTES EN ANGLAIS ») -->
+        <p data-i18n="storyP1">Tout a commencé en 2024 avec un coffee truck à Genève. En 2026, Adéla et Lloyd Arrigoni ont posé leurs tasses avenue d'Ouchy, dans une petite arcade claire : murs crème, comptoir en terrazzo, tables bleues et une dizaine de places.</p>
+        <p data-i18n="storyP2">Lloyd est derrière la machine, Adéla aux fourneaux, et Joey, le Boston Terrier de la maison, supervise l'ensemble.</p>
+        <p data-i18n="storyP3">On vient pour un flat white à emporter avant la baignade, ou pour s'asseoir et ne rien faire pendant un quart d'heure.</p>
 
         <!-- PORTRAITS : les monogrammes A et L tiennent la place des photos.
              Une fois les photos validées, remplacer chaque <div class="frame">…</div> par
@@ -440,26 +455,26 @@ footer .brand{align-items:flex-start}
         <div class="portraits">
           <figure class="portrait">
             <div class="frame" aria-hidden="true"><span>A</span></div>
-            <figcaption>Adéla<small>Aux fourneaux</small></figcaption>
+            <figcaption>Adéla<small data-i18n="portraitAdela">Aux fourneaux</small></figcaption>
           </figure>
           <figure class="portrait">
             <div class="frame" aria-hidden="true"><span>L</span></div>
-            <figcaption>Lloyd<small>Derrière la machine</small></figcaption>
+            <figcaption>Lloyd<small data-i18n="portraitLloyd">Derrière la machine</small></figcaption>
           </figure>
         </div>
       </div>
-      <img class="story-img" src="visuels/interieur.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La salle du Café Contemplation : comptoir en terrazzo, tables bleues et banquette en chêne">
+      <img class="story-img" src="visuels/interieur.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La salle du Café Contemplation : comptoir en terrazzo, tables bleues et banquette en chêne" data-i18n-attr="alt:altInterior">
     </div>
   </section>
 
   <!-- ============ GRAIN 3D (dessiné en direct avec Three.js, voir le script « Grain de café 3D ») ============ -->
   <section class="grain" id="grain" aria-labelledby="h-grain">
     <div class="wrap grain-in">
-      <div class="bean-stage" id="bean-stage" aria-hidden="true" title="Faites-le tourner">
+      <div class="bean-stage" id="bean-stage" aria-hidden="true" title="Faites-le tourner" data-i18n-attr="title:beanTitle">
         <span class="bean-shadow"></span>
         <canvas id="bean"></canvas>
       </div>
-      <h2 id="h-grain">Tout commence par un grain.</h2>
+      <h2 id="h-grain" data-i18n="grainTitle">Tout commence par un grain.</h2>
     </div>
   </section>
 
@@ -469,16 +484,16 @@ footer .brand{align-items:flex-start}
       <div class="menu-top">
       <div class="menu-head" id="menu-head">
         <div id="menu-title">
-          <p class="kicker">La carte</p>
-          <h2 id="h-carte">Boissons</h2>
+          <p class="kicker" data-i18n="menuKicker">La carte</p>
+          <h2 id="h-carte" data-i18n="menuTitle">Boissons</h2>
         </div>
         <!-- Pot à lait : le filet de lait en part. Purement décoratif. -->
         <img class="pitcher" id="pitcher" src="visuels/pot-a-lait.webp" width="480" height="480" alt="" aria-hidden="true" decoding="async">
       </div>
-        <ul class="legend" aria-label="Légende de la carte">
-          <li><span class="heart" aria-hidden="true">♥</span> Coup de cœur de la maison</li>
-          <li><span class="tag">chaud</span><span class="tag cold">glacé</span> Servi chaud ou glacé</li>
-          <li>Prix en CHF, TVA incluse</li>
+        <ul class="legend" aria-label="Légende de la carte" data-i18n-attr="aria-label:legendLabel">
+          <li><span class="heart" aria-hidden="true">♥</span> <span data-i18n="legendFav">Coup de cœur de la maison</span></li>
+          <li><span class="tag" data-i18n="tagHot">chaud</span><span class="tag cold" data-i18n="tagIced">glacé</span> <span data-i18n="legendTemp">Servi chaud ou glacé</span></li>
+          <li data-i18n="legendPrices">Prix en CHF, TVA incluse</li>
         </ul>
       </div>
       <div class="pour-zone" id="pour-zone">
@@ -496,10 +511,10 @@ footer .brand{align-items:flex-start}
       </div>
 
       <div class="sweets" id="douceurs">
-        <img src="visuels/patisseries.webp" width="1344" height="1800" loading="lazy" decoding="async" alt="Cookies et koláče maison présentés sur le comptoir en terrazzo">
+        <img src="visuels/patisseries.webp" width="1344" height="1800" loading="lazy" decoding="async" alt="Cookies et koláče maison présentés sur le comptoir en terrazzo" data-i18n-attr="alt:altSweets">
         <div>
-          <p class="kicker">Fait maison</p>
-          <h2>Douceurs</h2>
+          <p class="kicker" data-i18n="sweetsKicker">Fait maison</p>
+          <h2 data-i18n="sweetsTitle">Douceurs</h2>
           <dl id="sweets-list"></dl>
           <p class="note" data-text="sweetsNote"></p>
         </div>
@@ -510,15 +525,15 @@ footer .brand{align-items:flex-start}
   <!-- ============ GALERIE + AVIS ============ -->
   <section id="galerie" aria-labelledby="h-galerie">
     <div class="wrap">
-      <p class="kicker">En images</p>
-      <h2 id="h-galerie">Le lieu, les tasses</h2>
+      <p class="kicker" data-i18n="galleryKicker">En images</p>
+      <h2 id="h-galerie" data-i18n="galleryTitle">Le lieu, les tasses</h2>
       <ul class="shots">
         <!-- Chaque photo s'ouvre en grand au clic (visionneuse plus bas) ; sans script, le lien ouvre simplement l'image. -->
-        <li class="big"><a class="shot" href="visuels/facade.webp"><img src="visuels/facade.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La devanture du Café Contemplation, avenue d'Ouchy 76 à Lausanne"></a></li>
-        <li><a class="shot" href="visuels/flat-white.webp"><img src="visuels/flat-white.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Flat white et son latte art sur une table bleue"></a></li>
-        <li><a class="shot" href="visuels/boisson-matcha-rose-cookies.webp"><img src="visuels/boisson-matcha-rose-cookies.webp" width="560" height="560" loading="lazy" decoding="async" alt="Flat white, matcha rose glacé et cookies maison sur une table bleue"></a></li>
-        <li><a class="shot" href="visuels/matcha.webp"><img src="visuels/matcha.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Matcha latte glacé et latte glacé sur une table du café"></a></li>
-        <li><a class="shot" href="visuels/boisson-flat-white-espresso-tonic.webp"><img src="visuels/boisson-flat-white-espresso-tonic.webp" width="720" height="720" loading="lazy" decoding="async" alt="Flat white au latte art en cygne et espresso tonic glacé"></a></li>
+        <li class="big"><a class="shot" href="visuels/facade.webp"><img src="visuels/facade.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La devanture du Café Contemplation, avenue d'Ouchy 76 à Lausanne" data-i18n-attr="alt:altFacade"></a></li>
+        <li><a class="shot" href="visuels/flat-white.webp"><img src="visuels/flat-white.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Flat white et son latte art sur une table bleue" data-i18n-attr="alt:altFlatWhite"></a></li>
+        <li><a class="shot" href="visuels/boisson-matcha-rose-cookies.webp"><img src="visuels/boisson-matcha-rose-cookies.webp" width="560" height="560" loading="lazy" decoding="async" alt="Flat white, matcha rose glacé et cookies maison sur une table bleue" data-i18n-attr="alt:altMatchaRose"></a></li>
+        <li><a class="shot" href="visuels/matcha.webp"><img src="visuels/matcha.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Matcha latte glacé et latte glacé sur une table du café" data-i18n-attr="alt:altMatcha"></a></li>
+        <li><a class="shot" href="visuels/boisson-flat-white-espresso-tonic.webp"><img src="visuels/boisson-flat-white-espresso-tonic.webp" width="720" height="720" loading="lazy" decoding="async" alt="Flat white au latte art en cygne et espresso tonic glacé" data-i18n-attr="alt:altTonic"></a></li>
       </ul>
 
       <div class="proof" id="avis">
@@ -527,7 +542,7 @@ footer .brand{align-items:flex-start}
           <span class="num"><span data-text="ratingLine"></span></span>
         </a>
         <div>
-          <a class="btn line" data-href="reviews" target="_blank" rel="noopener">Voir les avis</a>
+          <a class="btn line" data-href="reviews" target="_blank" rel="noopener" data-i18n="seeReviews">Voir les avis</a>
           <p class="note" data-text="ratingNote"></p>
         </div>
       </div>
@@ -539,25 +554,25 @@ footer .brand{align-items:flex-start}
   <!-- ============ HORAIRES & ACCÈS ============ -->
   <section id="infos" aria-labelledby="h-infos">
     <div class="wrap">
-      <p class="kicker">Passez nous voir</p>
-      <h2 id="h-infos">Horaires &amp; accès</h2>
+      <p class="kicker" data-i18n="infosKicker">Passez nous voir</p>
+      <h2 id="h-infos" data-i18n="infosTitle">Horaires &amp; accès</h2>
       <div class="info">
         <div>
-          <h3>Horaires</h3>
+          <h3 data-i18n="hoursH">Horaires</h3>
           <p class="notice" data-notice hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span></span></p>
           <p class="now" data-state="closed"><span class="dot" aria-hidden="true"></span><span data-status-text></span></p>
-          <table id="hours"><caption class="sr">Horaires d'ouverture par jour</caption><tbody></tbody></table>
+          <table id="hours"><caption class="sr" data-i18n="hoursCaption">Horaires d'ouverture par jour</caption><tbody></tbody></table>
         </div>
         <div>
-          <h3>Adresse</h3>
+          <h3 data-i18n="addressH">Adresse</h3>
           <p><span data-text="street"></span><br><span data-text="city"></span></p>
           <p class="plain" data-text="accessNote"></p>
           <div class="stack">
-            <a class="btn light" data-href="maps" target="_blank" rel="noopener">Ouvrir dans Google Maps</a>
+            <a class="btn light" data-href="maps" target="_blank" rel="noopener" data-i18n="openMaps">Ouvrir dans Google Maps</a>
           </div>
         </div>
         <div>
-          <h3>Contact</h3>
+          <h3 data-i18n="contactH">Contact</h3>
           <ul class="contact">
             <li><a data-href="tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/></svg><span data-text="phoneDisplay"></span></a></li>
             <li><a data-href="mailto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg><span data-text="email"></span></a></li>
@@ -571,8 +586,8 @@ footer .brand{align-items:flex-start}
         <img class="map-bg" src="visuels/facade.webp" width="1400" height="782" loading="lazy" decoding="async" alt="">
         <div class="map-cover">
           <p class="map-addr"><span data-text="street"></span> · <span data-text="city"></span></p>
-          <button class="btn light" type="button" id="map-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Afficher la carte</button>
-          <p class="map-note">La carte est chargée depuis Google Maps, seulement si vous cliquez.</p>
+          <button class="btn light" type="button" id="map-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span data-i18n="showMap">Afficher la carte</span></button>
+          <p class="map-note" data-i18n="mapNote">La carte est chargée depuis Google Maps, seulement si vous cliquez.</p>
         </div>
       </div>
     </div>
@@ -582,15 +597,15 @@ footer .brand{align-items:flex-start}
 <footer>
   <div class="wrap">
     <div>
-      <a class="brand" href="#top" aria-label="Café Contemplation, retour en haut de page"><b>CAFÉ</b><span>Contemplation</span></a>
-      <p>Café de spécialité à Ouchy<br><span data-text="addressLine"></span><br><span data-hours-summary></span></p>
+      <a class="brand" href="#top" aria-label="Café Contemplation, retour en haut de page" data-i18n-attr="aria-label:brandHome"><b>CAFÉ</b><span>Contemplation</span></a>
+      <p><span data-i18n="footerTagline">Café de spécialité à Ouchy</span><br><span data-text="addressLine"></span><br><span data-hours-summary></span></p>
     </div>
-    <ul aria-label="Liens du site">
-      <li><a href="#histoire">Le café</a></li>
-      <li><a href="#carte">La carte</a></li>
-      <li><a href="#infos">Horaires &amp; accès</a></li>
+    <ul aria-label="Liens du site" data-i18n-attr="aria-label:footerLinks">
+      <li><a href="#histoire" data-i18n="navCafe">Le café</a></li>
+      <li><a href="#carte" data-i18n="navMenu">La carte</a></li>
+      <li><a href="#infos" data-i18n="navInfos">Horaires &amp; accès</a></li>
       <li><a data-href="instagram" target="_blank" rel="noopener">Instagram</a></li>
-      <li><a data-href="reviews" target="_blank" rel="noopener">Avis Google</a></li>
+      <li><a data-href="reviews" target="_blank" rel="noopener" data-i18n="footerReviews">Avis Google</a></li>
     </ul>
     <p class="legal">© <span id="year">2026</span> Café Contemplation, Lausanne-Ouchy
       <!-- À AJOUTER AVANT MISE EN LIGNE (textes à fournir, ne pas inventer) :
@@ -603,19 +618,19 @@ footer .brand{align-items:flex-start}
 </footer>
 
 <!-- Visionneuse de la galerie (ouverte au clic sur une photo) -->
-<dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
+<dialog class="lightbox" id="lightbox" aria-label="Photo agrandie" data-i18n-attr="aria-label:lbLabel">
   <figure><img id="lb-img" alt=""><figcaption id="lb-cap" aria-hidden="true"></figcaption></figure>
   <p class="lb-count" id="lb-count"></p>
-  <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Fermer la photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  <button class="lb-btn lb-prev" id="lb-prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-  <button class="lb-btn lb-next" id="lb-next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Fermer la photo" data-i18n-attr="aria-label:lbClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="lb-btn lb-prev" id="lb-prev" type="button" aria-label="Photo précédente" data-i18n-attr="aria-label:lbPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lb-btn lb-next" id="lb-next" type="button" aria-label="Photo suivante" data-i18n-attr="aria-label:lbNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 </dialog>
 
 <!-- Barre d'actions mobile -->
-<div class="dock" role="navigation" aria-label="Actions rapides">
-  <a href="#carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17"/></svg>Menu</a>
-  <a data-href="directions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.5"/></svg>Itinéraire</a>
-  <a data-href="tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.500 3.500h3l1.500 4-2 1.500a12 12 0 0 0 6 6l1.500-2 4 1.500v3a2 2 0 0 1-2.200 2A17 17 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z"/></svg>Appeler</a>
+<div class="dock" role="navigation" aria-label="Actions rapides" data-i18n-attr="aria-label:dockLabel">
+  <a href="#carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17"/></svg><span data-i18n="dockMenu">Menu</span></a>
+  <a data-href="directions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.5"/></svg><span data-i18n="dockDirections">Itinéraire</span></a>
+  <a data-href="tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.500 3.500h3l1.500 4-2 1.500a12 12 0 0 0 6 6l1.500-2 4 1.500v3a2 2 0 0 1-2.200 2A17 17 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z"/></svg><span data-i18n="dockCall">Appeler</span></a>
 </div>
 
 <script>
@@ -627,6 +642,12 @@ footer .brand{align-items:flex-start}
    ne se modifie qu'ici, à un seul endroit.
    (Les textes d'accueil et l'histoire du café sont dans le HTML plus haut,
    repérés par les commentaires « TEXTE ».)
+
+   VERSION ANGLAISE : à côté d'un texte français, ajouter le même champ suivi
+   de « _en » (ex. name: "Chocolat chaud", name_en: "Hot chocolate").
+   Sans « _en », le texte français s'affiche aussi en anglais.
+   Les textes fixes de la page (titres, boutons…) se traduisent plus bas,
+   dans le bloc « TEXTES EN ANGLAIS ».
    ===================================================================== */
 const SITE_DATA = {
   name: "Café Contemplation",
@@ -646,8 +667,8 @@ const SITE_DATA = {
 
   /* --- Fermetures exceptionnelles (vacances, jours fériés…). Dates au format "AAAA-MM-JJ", « au » inclus ;
          pour un seul jour, « au » peut être omis. Exemples :
-           { du: "2026-12-24", au: "2027-01-02", motif: "Vacances de fin d'année" },
-           { du: "2027-04-02", motif: "Vendredi saint" }
+           { du: "2026-12-24", au: "2027-01-02", motif: "Vacances de fin d'année", motif_en: "Christmas holidays" },
+           { du: "2027-04-02", motif: "Vendredi saint", motif_en: "Good Friday" }
          Un bandeau l'annonce en haut du site et dans les horaires quelques jours avant (réglage ci-dessous),
          et le statut « Ouvert / Fermé » indique la date de réouverture. Retirer les fermetures passées de temps en temps. --- */
   fermetures: [],
@@ -665,7 +686,8 @@ const SITE_DATA = {
     instagramHandle: "@cafecontemplation",
     instagramUrl: "https://www.instagram.com/cafecontemplation/",
     /* À CONFIRMER avec le propriétaire : indication d'accès rédigée pour la démo. */
-    accessNote: "Métro m2, arrêt Ouchy-Olympique, puis deux minutes à pied."
+    accessNote: "Métro m2, arrêt Ouchy-Olympique, puis deux minutes à pied.",
+    accessNote_en: "Metro m2 to Ouchy-Olympique, then a two-minute walk."
   },
 
   /* --- Liens Google --- */
@@ -674,8 +696,9 @@ const SITE_DATA = {
     directions: "https://www.google.com/maps/dir/?api=1&destination=Caf%C3%A9+Contemplation%2C+Avenue+d%27Ouchy+76%2C+1006+Lausanne"
   },
 
-  /* --- Note Google : saisie à la main, à mettre à jour de temps en temps (pas de synchronisation automatique). --- */
-  google: { rating: "5,0", ratingValue: 5.0, reviewCount: 188, checkedOn: "novembre 2026" },
+  /* --- Note Google : saisie à la main, à mettre à jour de temps en temps (pas de synchronisation automatique).
+         checkedOn = mois du relevé, au format "AAAA-MM" (affiché « novembre 2026 » / « November 2026 »). --- */
+  google: { ratingValue: 5.0, reviewCount: 188, checkedOn: "2026-11" },
 
   /* --- Citations de clients : laisser vide tant qu'aucune n'est validée. Exemple : { text: "…", author: "Prénom N." } --- */
   testimonials: [],
@@ -686,15 +709,22 @@ const SITE_DATA = {
     takeaway: "Sur place ou à emporter.",
     sweets: "La vitrine change selon le jour et la saison : tout n'est pas disponible en permanence."
   },
+  notes_en: {
+    payment: "We're cashless: card payments only.",
+    allergy: "Allergies or intolerances? Please let the team know before you order.",
+    takeaway: "Eat in or take away.",
+    sweets: "The display changes with the day and the season: not everything is available every day."
+  },
 
   /* --- La carte. Pour chaque produit :
-         name   nom affiché
+         name   nom affiché                       (name_en : nom en anglais, si différent)
          price  prix en CHF (nombre)
-         temps  ["chaud"], ["glacé"] ou ["chaud","glacé"] (facultatif)
+         temps  ["chaud"], ["glacé"] ou ["chaud","glacé"] (facultatif ; « hot / iced » en anglais)
          fav    true = coup de cœur (facultatif)
-         desc   petite description (facultatif)
+         desc   petite description (facultatif)  (desc_en : en anglais)
          gap    true = petit espace avant la ligne (facultatif)
-         available: false = masque le produit sans le supprimer (facultatif) --- */
+         available: false = masque le produit sans le supprimer (facultatif)
+         Une catégorie peut aussi avoir title_en. --- */
   menu: [
     {
       id: "coffee", title: "Specialty coffee",
@@ -716,17 +746,17 @@ const SITE_DATA = {
       id: "matcha", title: "Matcha lovers",
       items: [
         { name: "Matcha latte",   price: 7.00, temps: ["chaud", "glacé"] },
-        { name: "Matcha Vanille", price: 7.20, temps: ["chaud", "glacé"], fav: true },
-        { name: "Matcha Lavande", price: 7.20, temps: ["chaud", "glacé"] },
-        { name: "Matcha Rose",    price: 7.20, temps: ["chaud", "glacé"] },
-        { name: "Matcha Fraise",  price: 7.50, temps: ["chaud", "glacé"] }
+        { name: "Matcha Vanille", name_en: "Vanilla matcha",    price: 7.20, temps: ["chaud", "glacé"], fav: true },
+        { name: "Matcha Lavande", name_en: "Lavender matcha",   price: 7.20, temps: ["chaud", "glacé"] },
+        { name: "Matcha Rose",    name_en: "Rose matcha",       price: 7.20, temps: ["chaud", "glacé"] },
+        { name: "Matcha Fraise",  name_en: "Strawberry matcha", price: 7.50, temps: ["chaud", "glacé"] }
       ]
     },
     {
-      id: "supplements", title: "Suppléments", after: "matcha",   // affiché sous « Matcha lovers »
+      id: "supplements", title: "Suppléments", title_en: "Extras", after: "matcha",   // affiché sous « Matcha lovers »
       items: [
-        { name: "Lait alternatif", price: 0.50, desc: "Avoine, amande, coco, pois, sans lactose" },
-        { name: "Sirop",           price: 0.50 },
+        { name: "Lait alternatif", name_en: "Plant-based milk", price: 0.50, desc: "Avoine, amande, coco, pois, sans lactose", desc_en: "Oat, almond, coconut, pea, lactose-free" },
+        { name: "Sirop",           name_en: "Syrup",            price: 0.50 },
         { name: "Extra shot",      price: 1.50 }
       ]
     },
@@ -734,9 +764,9 @@ const SITE_DATA = {
       id: "tea", title: "Chocolate & Tea",
       items: [
         { name: "Chai latte",     price: 6.50, temps: ["chaud", "glacé"], fav: true },
-        { name: "Chocolat chaud", price: 6.50, temps: ["chaud", "glacé"] },
+        { name: "Chocolat chaud", name_en: "Hot chocolate", price: 6.50, temps: ["chaud", "glacé"] },
         { name: "Hojicha latte",  price: 6.50, temps: ["chaud", "glacé"] },
-        { name: "Thé chaud",      price: 4.50, desc: "Sencha, Jasmin, Earl Grey, Irish Breakfast, Thé fumé, Infusion" },
+        { name: "Thé chaud",      name_en: "Tea", price: 4.50, desc: "Sencha, Jasmin, Earl Grey, Irish Breakfast, Thé fumé, Infusion", desc_en: "Sencha, jasmine, Earl Grey, Irish Breakfast, smoked tea, herbal infusion" },
         { name: "Make it dirty",  price: 1.50, gap: true }
       ]
     }
@@ -745,17 +775,184 @@ const SITE_DATA = {
   /* --- Douceurs maison.
          price    prix en CHF (facultatif)
          confirm  true = affiche « à confirmer » à côté du prix : à retirer une fois validé par le propriétaire
+         name_en / desc_en : en anglais (facultatif)
          Prix relevés sur les étiquettes de la vitrine (vidéo Instagram de mai 2026). --- */
   douceurs: [
-    { name: "Cookie de la nonna",    desc: "Chocolat, noisette. La recette de la grand-mère de Lloyd.", price: 5.00, confirm: true },
-    { name: "Cookie matcha",         desc: "Chocolat blanc.", price: 5.00, confirm: true },
-    { name: "Kola-Czech",            desc: "Le koláč de la grand-maman tchèque d'Adéla, garni selon la saison.", price: 7.50, confirm: true },
-    { name: "Brownie",               desc: "Fait maison." },
-    { name: "Cake citron & romarin", desc: "Fait maison." },
-    { name: "Viennoiseries",         desc: "Livrées par une boulangerie de Pully." }
+    { name: "Cookie de la nonna",    name_en: "Nonna's cookie",
+      desc: "Chocolat, noisette. La recette de la grand-mère de Lloyd.", desc_en: "Chocolate and hazelnut. Lloyd's grandmother's recipe.", price: 5.00, confirm: true },
+    { name: "Cookie matcha",         name_en: "Matcha cookie",
+      desc: "Chocolat blanc.", desc_en: "White chocolate.", price: 5.00, confirm: true },
+    { name: "Kola-Czech",
+      desc: "Le koláč de la grand-maman tchèque d'Adéla, garni selon la saison.", desc_en: "The koláč of Adéla's Czech grandmother, with a seasonal filling.", price: 7.50, confirm: true },
+    { name: "Brownie",               desc: "Fait maison.", desc_en: "Homemade." },
+    { name: "Cake citron & romarin", name_en: "Lemon & rosemary cake", desc: "Fait maison.", desc_en: "Homemade." },
+    { name: "Viennoiseries",         name_en: "Croissants & pastries", desc: "Livrées par une boulangerie de Pully.", desc_en: "Delivered by a bakery in Pully." }
   ]
 };
 /* ===================== FIN DES DONNÉES ===================== */
+
+
+/* =====================================================================
+   TEXTES EN ANGLAIS
+   Le français est écrit dans le HTML ; chaque texte traduit y porte une clé
+   (attribut data-i18n="clé", ou data-i18n-attr="aria-label:clé" pour les attributs).
+   Pour modifier l'anglais : changer le texte en face de la clé, ci-dessous.
+   ===================================================================== */
+const TEXT_EN = {
+  docTitle: "Café Contemplation · Specialty coffee in Ouchy, Lausanne",
+  docDesc: "Café Contemplation: specialty coffee, matcha and homemade treats in Ouchy, a stone's throw from Lake Geneva. Avenue d'Ouchy 76, 1006 Lausanne. Open Wednesday to Sunday.",
+  skip: "Skip to content",
+  brandHome: "Café Contemplation, back to top",
+  navMain: "Main navigation",
+  navCafe: "The café",
+  navMenu: "Menu",
+  navInfos: "Hours &amp; directions",
+  navDirections: "Directions",
+  heroTitle: "Slow down by the lake, <em>one coffee at a time.</em>",
+  heroLede: "Specialty coffee, matcha and homemade treats in Ouchy, a stone's throw from Lake Geneva in Lausanne.",
+  ctaMenu: "See the menu",
+  ctaDirections: "Get directions",
+  ctaCall: "Call",
+  scrollCue: "Scroll down",
+  storyKicker: "The café",
+  storyTitle: "From a coffee trike in Geneva to a little shop in Ouchy",
+  storyP1: "It all started in 2024 with a coffee truck in Geneva. In 2026, Adéla and Lloyd Arrigoni set down their cups on Avenue d'Ouchy, in a small, bright shop: cream walls, a terrazzo counter, blue tables and about ten seats.",
+  storyP2: "Lloyd is behind the machine, Adéla in the kitchen, and Joey, the house Boston Terrier, keeps an eye on everything.",
+  storyP3: "Come for a flat white to go before a swim in the lake, or sit down and do nothing at all for a quarter of an hour.",
+  portraitAdela: "In the kitchen",
+  portraitLloyd: "Behind the machine",
+  altInterior: "Inside Café Contemplation: terrazzo counter, blue tables and an oak bench",
+  beanTitle: "Give it a spin",
+  grainTitle: "It all starts with a bean.",
+  menuKicker: "The menu",
+  menuTitle: "Drinks",
+  legendLabel: "Menu key",
+  legendFav: "House favourite",
+  legendTemp: "Served hot or iced",
+  legendPrices: "Prices in CHF, VAT included",
+  tagHot: "hot",
+  tagIced: "iced",
+  altSweets: "Homemade cookies and koláče on the terrazzo counter",
+  sweetsKicker: "Homemade",
+  sweetsTitle: "Sweet treats",
+  galleryKicker: "In pictures",
+  galleryTitle: "The place, the cups",
+  altFacade: "The Café Contemplation shopfront, Avenue d'Ouchy 76, Lausanne",
+  altFlatWhite: "A flat white with latte art on a blue table",
+  altMatchaRose: "A flat white, an iced rose matcha and homemade cookies on a blue table",
+  altMatcha: "An iced matcha latte and an iced latte on a café table",
+  altTonic: "A flat white with swan latte art and an iced espresso tonic",
+  seeReviews: "Read the reviews",
+  infosKicker: "Come and see us",
+  infosTitle: "Hours &amp; directions",
+  hoursH: "Opening hours",
+  hoursCaption: "Opening hours by day",
+  addressH: "Address",
+  contactH: "Contact",
+  openMaps: "Open in Google Maps",
+  showMap: "Show the map",
+  mapNote: "The map loads from Google Maps, only if you click.",
+  footerTagline: "Specialty coffee in Ouchy",
+  footerLinks: "Site links",
+  footerReviews: "Google reviews",
+  lbLabel: "Enlarged photo",
+  lbClose: "Close the photo",
+  lbPrev: "Previous photo",
+  lbNext: "Next photo",
+  dockLabel: "Quick actions",
+  dockMenu: "Menu",
+  dockDirections: "Directions",
+  dockCall: "Call"
+};
+
+/* Petits textes fabriqués par les scripts (statut, fermetures, boutons…), dans les deux langues.
+   {t} = heure, {d} = jour, {date} = date, etc. */
+const UI = {
+  fr: {
+    open: "Ouvert · jusqu'à {t}", soon: "Ferme bientôt · à {t}", today: "Fermé · ouvre aujourd'hui à {t}",
+    next: "Fermé · ouvre {d} à {t}", reopen: "Fermeture exceptionnelle · réouverture {d} à {t}",
+    tomorrow: "demain", onDate: "le {date}", closed: "Fermé",
+    nToday: "Fermé aujourd'hui", nOn: "Fermé le {date}", nUntil: "Fermé jusqu'au {date} inclus", nRange: "Fermé du {a} au {b}",
+    fav: "Coup de cœur : ", francs: " francs", tbc: "à confirmer", hot: "chaud", iced: "glacé",
+    rating: "{r}/5 sur Google — {n} avis", ratingNote: "Note relevée en {m}.", ratingAria: "{line}. Voir la fiche Google", call: "Appeler le {p}",
+    navOpen: "Ouvrir le menu de navigation", navClose: "Fermer le menu de navigation",
+    play: "Lire la vidéo", pause: "Pause vidéo", mapTitle: "Carte : {q}"
+  },
+  en: {
+    open: "Open · until {t}", soon: "Closing soon · at {t}", today: "Closed · opens today at {t}",
+    next: "Closed · opens {d} at {t}", reopen: "Temporarily closed · reopens {d} at {t}",
+    tomorrow: "tomorrow", onDate: "on {date}", closed: "Closed",
+    nToday: "Closed today", nOn: "Closed on {date}", nUntil: "Closed until {date} inclusive", nRange: "Closed from {a} to {b}",
+    fav: "House favourite: ", francs: " Swiss francs", tbc: "to be confirmed", hot: "hot", iced: "iced",
+    rating: "{r}/5 on Google — {n} reviews", ratingNote: "Rating checked in {m}.", ratingAria: "{line}. See the Google listing", call: "Call {p}",
+    navOpen: "Open the navigation menu", navClose: "Close the navigation menu",
+    play: "Play the video", pause: "Pause the video", mapTitle: "Map: {q}"
+  }
+};
+const EN_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+
+/* ---------- Langue affichée ----------
+   Ordre de priorité : ?lang=en ou ?lang=fr dans l'adresse, puis le dernier choix du visiteur (bouton FR / EN),
+   puis l'anglais si son navigateur ne demande pas du tout le français. Les robots des moteurs de recherche
+   restent en français, la langue principale du site. */
+var LANG = (function(){
+  try { var q = new URLSearchParams(location.search).get("lang"); if (q === "fr" || q === "en") return q; } catch (e) {}
+  try { var s = localStorage.getItem("lang"); if (s === "fr" || s === "en") return s; } catch (e) {}
+  if (/bot|crawl|spider|slurp|lighthouse/i.test(navigator.userAgent || "")) return "fr";
+  var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "fr"];
+  return prefs.some(function(l){ return /^fr\b/i.test(l); }) ? "fr" : "en";
+})();
+function t(key, vars){                          // petit texte d'interface dans la langue affichée
+  var s = UI[LANG][key]; if (s == null) s = UI.fr[key];
+  return String(s).replace(/\{(\w+)\}/g, function(_, k){ return vars && vars[k] != null ? vars[k] : ""; });
+}
+function tr(obj, field){ return LANG === "en" && obj[field + "_en"] ? obj[field + "_en"] : obj[field]; }   // champ « _en » s'il existe
+function locale(){ return LANG === "en" ? "en-GB" : "fr-CH"; }
+
+/* Textes fixes du HTML : le français d'origine est gardé en mémoire pour pouvoir y revenir. */
+var FR_TEXT = new WeakMap(), FR_ATTR = new WeakMap();
+function applyStaticTexts(){
+  document.querySelectorAll("[data-i18n]").forEach(function(e){
+    if (!FR_TEXT.has(e)) FR_TEXT.set(e, e.innerHTML);
+    var en = TEXT_EN[e.getAttribute("data-i18n")];
+    e.innerHTML = LANG === "en" && en != null ? en : FR_TEXT.get(e);
+  });
+  document.querySelectorAll("[data-i18n-attr]").forEach(function(e){
+    if (!FR_ATTR.has(e)) FR_ATTR.set(e, {});
+    var saved = FR_ATTR.get(e);
+    e.getAttribute("data-i18n-attr").split(",").forEach(function(pair){
+      var p = pair.split(":"), attr = p[0].trim(), key = p[1].trim();
+      if (!(attr in saved)) saved[attr] = e.getAttribute(attr);
+      var en = TEXT_EN[key];
+      e.setAttribute(attr, LANG === "en" && en != null ? en : saved[attr]);
+    });
+  });
+  var desc = document.querySelector('meta[name="description"]');
+  if (!FR_TEXT.has(document)) FR_TEXT.set(document, { title: document.title, desc: desc ? desc.content : "" });
+  var fr = FR_TEXT.get(document);
+  document.title = LANG === "en" ? TEXT_EN.docTitle : fr.title;
+  if (desc) desc.content = LANG === "en" ? TEXT_EN.docDesc : fr.desc;
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-lang]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === LANG)); });
+}
+
+/* Changement de langue (bouton FR / EN) : tout ce qui est fabriqué à partir des données est refait. */
+function setLang(lang){
+  if (lang === LANG) return;
+  LANG = lang;
+  try { localStorage.setItem("lang", lang); } catch (e) {}
+  try {
+    var u = new URL(location.href);
+    if (lang === "en") u.searchParams.set("lang", "en"); else u.searchParams.delete("lang");
+    history.replaceState(null, "", u.pathname + u.search + u.hash);
+  } catch (e) {}
+  applyStaticTexts();
+  bind();
+  renderMenu();
+  HOURS.render();
+  window.dispatchEvent(new Event("langchange"));
+}
 
 
 /* ---------- Petits outils ---------- */
@@ -770,16 +967,19 @@ function el(tag, attrs, kids){
 function chf(n){ return n.toFixed(2); }
 function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
 
-/* ---------- Textes et liens tirés des données ---------- */
-(function bind(){
-  var c = SITE_DATA.contact, g = SITE_DATA.google, n = SITE_DATA.notes;
+/* ---------- Textes et liens tirés des données (refaits au changement de langue) ---------- */
+function bind(){
+  var c = SITE_DATA.contact, g = SITE_DATA.google, n = (LANG === "en" && SITE_DATA.notes_en) || SITE_DATA.notes;
   var cityLine = c.postalCode + " " + c.city;
+  var rating = new Intl.NumberFormat(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(g.ratingValue);
+  var ym = String(g.checkedOn).split("-");
+  var month = ym.length === 2 ? new Intl.DateTimeFormat(locale(), { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(+ym[0], ym[1] - 1, 1))) : g.checkedOn;
   var text = {
     street: c.street, city: cityLine, addressLine: c.street + " · " + cityLine,
     phoneDisplay: c.phoneDisplay, email: c.email, instagramHandle: "Instagram " + c.instagramHandle,
-    accessNote: c.accessNote, paymentNote: n.payment, allergyNote: n.allergy, takeawayNote: n.takeaway, sweetsNote: n.sweets,
-    ratingLine: g.rating + "/5 sur Google — " + g.reviewCount + " avis",
-    ratingNote: "Note relevée en " + g.checkedOn + "."
+    accessNote: tr(c, "accessNote"), paymentNote: n.payment, allergyNote: n.allergy, takeawayNote: n.takeaway, sweetsNote: n.sweets,
+    ratingLine: t("rating", { r: rating, n: g.reviewCount }),
+    ratingNote: t("ratingNote", { m: month })
   };
   var place = SITE_DATA.links.googlePlace;
   var href = {
@@ -788,10 +988,11 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
   };
   document.querySelectorAll("[data-text]").forEach(function(e){ var v = text[e.getAttribute("data-text")]; if (v) e.textContent = v; });
   document.querySelectorAll("[data-href]").forEach(function(e){ var v = href[e.getAttribute("data-href")]; if (v) e.setAttribute("href", v); });
-  document.querySelectorAll('a[data-href="tel"].btn, .dock a[data-href="tel"]').forEach(function(e){ e.setAttribute("aria-label", "Appeler le " + c.phoneDisplay); });
-  document.querySelectorAll('a.score').forEach(function(e){ e.setAttribute("aria-label", text.ratingLine + ". Voir la fiche Google"); });
+  document.querySelectorAll('a[data-href="tel"].btn, .dock a[data-href="tel"]').forEach(function(e){ e.setAttribute("aria-label", t("call", { p: c.phoneDisplay })); });
+  document.querySelectorAll('a.score').forEach(function(e){ e.setAttribute("aria-label", t("ratingAria", { line: text.ratingLine })); });
   document.getElementById("year").textContent = new Date().getFullYear();
-})();
+}
+bind();
 
 /* ---------- Carte géographique (Horaires & accès) : Google Maps n'est contacté qu'au clic ---------- */
 (function mapOnClick(){
@@ -801,8 +1002,8 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
   var q = SITE_DATA.name + ", " + c.street + ", " + c.postalCode + " " + c.city;
   btn.addEventListener("click", function(){
     var f = document.createElement("iframe");
-    f.src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=16&output=embed";
-    f.title = "Carte : " + q;
+    f.src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=16&hl=" + LANG + "&output=embed";
+    f.title = t("mapTitle", { q: q });
     f.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
     f.setAttribute("allowfullscreen", "");
     box.appendChild(f); box.classList.add("on");
@@ -847,30 +1048,33 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
   dlg.addEventListener("close", function(){ if (opener) opener.focus(); });
 })();
 
-/* ---------- Carte ---------- */
-(function renderMenu(){
+/* ---------- Carte (refaite au changement de langue) ---------- */
+function renderMenu(){
   var root = document.getElementById("menu"), cols = {};
+  root.textContent = "";
   SITE_DATA.menu.forEach(function(cat){
     var items = cat.items.filter(function(i){ return i.available !== false; });
     if (!items.length) return;
     var ul = el("ul");
     items.forEach(function(i){
-      var name = el("span", { "class": "name" }, [document.createTextNode(i.name)]);
-      (i.temps || []).forEach(function(t){
-        name.appendChild(el("span", { "class": "tag" + (t === "glacé" ? " cold" : ""), text: t }));
+      var name = el("span", { "class": "name" }, [document.createTextNode(tr(i, "name"))]);
+      (i.temps || []).forEach(function(tp){
+        var iced = tp === "glacé";
+        name.appendChild(el("span", { "class": "tag" + (iced ? " cold" : ""), text: iced ? t("iced") : tp === "chaud" ? t("hot") : tp }));
       });
       var mark = i.fav
-        ? el("span", { "class": "heart" }, [el("span", { "aria-hidden": "true", text: "♥" }), el("span", { "class": "sr", text: "Coup de cœur : " })])
+        ? el("span", { "class": "heart" }, [el("span", { "aria-hidden": "true", text: "♥" }), el("span", { "class": "sr", text: t("fav") })])
         : el("span", { "aria-hidden": "true" });
+      var desc = tr(i, "desc");
       var li = el("li", i.gap ? { "class": "gap" } : null, [
         mark, name,
-        el("span", { "class": "price" }, [document.createTextNode(chf(i.price)), el("span", { "class": "sr", text: " francs" })]),
-        i.desc ? el("span", { "class": "desc", text: i.desc }) : null
+        el("span", { "class": "price" }, [document.createTextNode(chf(i.price)), el("span", { "class": "sr", text: t("francs") })]),
+        desc ? el("span", { "class": "desc", text: desc }) : null
       ]);
       ul.appendChild(li);
     });
     var block = [
-      el("h3", { text: cat.title }),
+      el("h3", { text: tr(cat, "title") }),
       el("p", { "class": "sub" }, [el("span", { "aria-hidden": "true" }), el("span", { text: "CHF" })]),
       ul
     ];
@@ -880,30 +1084,36 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
   });
 
   var dl = document.getElementById("sweets-list");
+  dl.textContent = "";
   SITE_DATA.douceurs.filter(function(d){ return d.available !== false; }).forEach(function(d){
     dl.appendChild(el("div", null, [
       el("dt", null, [
-        el("span", { text: d.name }),
+        el("span", { text: tr(d, "name") }),
         typeof d.price === "number" ? el("span", { "class": "price", text: "CHF " + chf(d.price) }) : null,
-        d.confirm ? el("span", { "class": "tbc", text: "à confirmer" }) : null
+        d.confirm ? el("span", { "class": "tbc", text: t("tbc") }) : null
       ]),
-      el("dd", { text: d.desc })
+      el("dd", { text: tr(d, "desc") })
     ]));
   });
 
   var q = document.getElementById("quotes");
+  q.textContent = "";
   if (SITE_DATA.testimonials.length){
-    SITE_DATA.testimonials.forEach(function(t){
-      q.appendChild(el("blockquote", null, [el("p", { text: "« " + t.text + " »", style: "margin:0" }), el("cite", { text: t.author })]));
+    SITE_DATA.testimonials.forEach(function(quote){
+      var open = LANG === "en" ? "“" : "« ", close = LANG === "en" ? "”" : " »";
+      q.appendChild(el("blockquote", null, [el("p", { text: open + tr(quote, "text") + close, style: "margin:0" }), el("cite", { text: quote.author })]));
     });
     q.hidden = false;
   }
-})();
+  window.dispatchEvent(new Event("menu-rendered"));   // l'animation du lait recalcule ses repères
+}
+renderMenu();
 
 /* ---------- Horaires et statut ouvert / fermé (heure suisse) ---------- */
 /* Dates « AAAA-MM-JJ » : calculées en UTC pour éviter les surprises du passage à l'heure d'été. */
 function addDays(s, n){ var p = s.split("-"); return new Date(Date.UTC(+p[0], p[1] - 1, +p[2] + n)).toISOString().slice(0, 10); }
-function frDate(s){ var p = s.split("-"); return new Intl.DateTimeFormat("fr-CH", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" }).format(new Date(Date.UTC(+p[0], p[1] - 1, +p[2]))); }
+function longDate(s){ var p = s.split("-"); return new Intl.DateTimeFormat(locale(), { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" }).format(new Date(Date.UTC(+p[0], p[1] - 1, +p[2]))); }
+function dayName(i){ return LANG === "en" ? EN_DAYS[i] : SITE_DATA.hours[i].day; }
 function closureOn(s){                          // fermeture exceptionnelle qui couvre ce jour, sinon null
   var list = SITE_DATA.fermetures || [];
   for (var i = 0; i < list.length; i++){ var f = list[i]; if (s >= f.du && s <= (f.au || f.du)) return f; }
@@ -917,18 +1127,19 @@ function computeStatus(now){
     var o = mins(d.open), c = mins(d.close);
     if (now.minutes >= o && now.minutes < c){
       return (c - now.minutes <= soon)
-        ? { state: "soon", text: "Ferme bientôt · à " + d.close }
-        : { state: "open", text: "Ouvert · jusqu'à " + d.close };
+        ? { state: "soon", text: t("soon", { t: d.close }) }
+        : { state: "open", text: t("open", { t: d.close }) };
     }
-    if (now.minutes < o) return { state: "closed", text: "Fermé · ouvre aujourd'hui à " + d.open };
+    if (now.minutes < o) return { state: "closed", text: t("today", { t: d.open }) };
   }
   for (var i = 1; i <= 90; i++){                 // prochain jour ouvert, en sautant les fermetures exceptionnelles
-    var n = H[(now.day + i) % 7], date = now.date ? addDays(now.date, i) : null;
+    var wd = (now.day + i) % 7, n = H[wd], date = now.date ? addDays(now.date, i) : null;
     if (!n || n.closed || (date && closureOn(date))) continue;
-    var when = i === 1 ? "demain" : (i < 7 || !date) ? n.day.toLowerCase() : "le " + frDate(date);
-    return { state: "closed", text: (shut ? "Fermeture exceptionnelle · réouverture " : "Fermé · ouvre ") + when + " à " + n.open };
+    var name = LANG === "en" ? dayName(wd) : dayName(wd).toLowerCase();
+    var when = i === 1 ? t("tomorrow") : (i < 7 || !date) ? name : t("onDate", { date: longDate(date) });
+    return { state: "closed", text: t(shut ? "reopen" : "next", { d: when, t: n.open }) };
   }
-  return { state: "closed", text: "Fermé" };
+  return { state: "closed", text: t("closed") };
 }
 function closureNotice(today){                  // texte du bandeau : fermeture en cours ou dans les prochains jours
   var next = null, horizon = addDays(today, SITE_DATA.fermetureAnnonceJours || 14);
@@ -937,17 +1148,17 @@ function closureNotice(today){                  // texte du bandeau : fermeture 
     if (!next || f.du < next.du) next = f;
   });
   if (!next) return "";
-  var end = next.au || next.du, txt;
-  if (end === next.du) txt = next.du <= today ? "Fermé aujourd'hui" : "Fermé le " + frDate(next.du);
-  else txt = next.du <= today ? "Fermé jusqu'au " + frDate(end) + " inclus" : "Fermé du " + frDate(next.du) + " au " + frDate(end);
-  return txt + (next.motif ? " · " + next.motif : "");
+  var end = next.au || next.du, txt, motif = tr(next, "motif");
+  if (end === next.du) txt = next.du <= today ? t("nToday") : t("nOn", { date: longDate(next.du) });
+  else txt = next.du <= today ? t("nUntil", { date: longDate(end) }) : t("nRange", { a: longDate(next.du), b: longDate(end) });
+  return txt + (motif ? " · " + motif : "");
 }
-function hoursSummary(){                        // « Mer–Ven 07:30–16:00 · Sam–Dim 09:00–17:00 »
+function hoursSummary(){                        // « Mer–Ven 07:30–16:00 · Sam–Dim 09:00–17:00 » / « Wed–Fri … »
   var H = SITE_DATA.hours, out = [], i = 0;
   while (i < H.length){
     var j = i, key = H[i].closed ? "x" : H[i].open + H[i].close;
     while (j + 1 < H.length && (H[j + 1].closed ? "x" : H[j + 1].open + H[j + 1].close) === key) j++;
-    if (key !== "x") out.push(H[i].day.slice(0, 3) + (j > i ? "–" + H[j].day.slice(0, 3) : "") + " " + H[i].open + "–" + H[i].close);
+    if (key !== "x") out.push(dayName(i).slice(0, 3) + (j > i ? "–" + dayName(j).slice(0, 3) : "") + " " + H[i].open + "–" + H[i].close);
     i = j + 1;
   }
   return out.join(" · ");
@@ -957,15 +1168,19 @@ function zurichNow(){
   var o = {}; parts.forEach(function(p){ o[p.type] = p.value; });
   return { date: o.year + "-" + o.month + "-" + o.day, day: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(o.weekday), minutes: (parseInt(o.hour, 10) % 24) * 60 + parseInt(o.minute, 10) };
 }
-(function hours(){
+var HOURS = (function hours(){
   var body = document.querySelector("#hours tbody");
-  SITE_DATA.hours.forEach(function(d, i){
-    body.appendChild(el("tr", { "data-day": i }, [
-      el("th", { scope: "row", text: d.day }),
-      el("td", { text: d.closed ? "Fermé" : d.open + " – " + d.close })
-    ]));
-  });
-  document.querySelectorAll("[data-hours-summary]").forEach(function(e){ e.textContent = hoursSummary(); });
+  function table(){
+    body.textContent = "";
+    SITE_DATA.hours.forEach(function(d, i){
+      body.appendChild(el("tr", { "data-day": i }, [
+        el("th", { scope: "row", text: dayName(i) }),
+        el("td", { text: d.closed ? t("closed") : d.open + " – " + d.close })
+      ]));
+    });
+    document.querySelectorAll("[data-hours-summary]").forEach(function(e){ e.textContent = hoursSummary(); });
+  }
+  table();
   var last = "", lastNotice = null;
   function refresh(){
     var now, s;
@@ -982,11 +1197,12 @@ function zurichNow(){
     }
     if (s.text === last) return;   // n'annonce que les changements
     last = s.text;
-    document.querySelectorAll("[data-status-text]").forEach(function(t){
-      t.textContent = s.text; t.parentNode.setAttribute("data-state", s.state);
+    document.querySelectorAll("[data-status-text]").forEach(function(node){
+      node.textContent = s.text; node.parentNode.setAttribute("data-state", s.state);
     });
   }
   refresh(); setInterval(refresh, 30000);
+  return { render: function(){ table(); last = ""; lastNotice = null; refresh(); } };   // appelé au changement de langue
 })();
 
 /* ---------- Données structurées pour les moteurs de recherche ---------- */
@@ -1013,9 +1229,15 @@ function zurichNow(){
   function set(open){
     h.classList.toggle("open", open);
     b.setAttribute("aria-expanded", String(open));
-    b.setAttribute("aria-label", open ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation");
+    b.setAttribute("aria-label", t(open ? "navClose" : "navOpen"));
     p.setAttribute("d", open ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16");
   }
+  b.setAttribute("aria-label", t("navOpen"));
+  window.addEventListener("langchange", function(){ b.setAttribute("aria-label", t(h.classList.contains("open") ? "navClose" : "navOpen")); });
+  // Bouton FR / EN
+  document.querySelectorAll("[data-lang]").forEach(function(btn){
+    btn.addEventListener("click", function(){ setLang(btn.getAttribute("data-lang")); });
+  });
   b.addEventListener("click", function(){ set(!h.classList.contains("open")); });
   document.querySelectorAll("#nav a").forEach(function(a){ a.addEventListener("click", function(){ set(false); }); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && h.classList.contains("open")){ set(false); b.focus(); } });
@@ -1163,6 +1385,7 @@ function zurichNow(){
     rz = setTimeout(function(){ if (window.innerWidth !== lastW){ lastW = window.innerWidth; layout(); } else ask(); }, 120);
   });
   window.addEventListener("load", layout);
+  window.addEventListener("menu-rendered", layout);   // carte refaite (changement de langue) : nouvelles lignes à révéler
   pitcher.addEventListener("load", layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   layout();
@@ -1193,11 +1416,11 @@ function zurichNow(){
   function play(){ load(); var p = v.play(); if (p && p.catch) p.catch(function(){}); }
   function sync(){
     var on = !v.paused;
-    label.textContent = on ? "Pause vidéo" : "Lire la vidéo"; b.title = label.textContent;
+    label.textContent = t(on ? "pause" : "play"); b.title = label.textContent;
     b.setAttribute("aria-pressed", String(on));
     icon.setAttribute("d", on ? "M3 2h3v10H3zM8 2h3v10H8z" : "M3 2l9 5-9 5z");
   }
-  v.addEventListener("play", sync); v.addEventListener("pause", sync);
+  v.addEventListener("play", sync); v.addEventListener("pause", sync); window.addEventListener("langchange", sync);
   v.addEventListener("error", function(){ v.style.display = "none"; b.hidden = true; });   // le poster reste en fond
   b.addEventListener("click", function(){ if (v.paused) play(); else v.pause(); });
   sync();
@@ -1210,6 +1433,9 @@ function zurichNow(){
     setTimeout(start, 6000);                  // filet de sécurité si le navigateur ne signale jamais « assez chargé »
   }
 })();
+
+/* ---------- Langue au chargement : textes fixes du HTML (le reste est déjà fabriqué dans la bonne langue) ---------- */
+applyStaticTexts();
 </script>
 
 <!-- ---------- Grain de café 3D ----------

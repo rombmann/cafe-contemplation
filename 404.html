@@ -29,7 +29,9 @@ h1{font:600 clamp(28px,6vw,40px)/1.1 "Fraunces",Georgia,serif;margin:0 0 14px;te
 p{margin:0 0 26px;color:var(--stone)}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 24px;border-radius:999px;background:var(--blue-deep);color:var(--paper);font-weight:600;text-decoration:none}
 .btn:hover{background:#1d3e5c}
-.btn:focus-visible{outline:3px solid #8FC0EA;outline-offset:3px}
+.btn:focus-visible,.en a:focus-visible{outline:3px solid #8FC0EA;outline-offset:3px}
+.en{margin:26px 0 0;font-size:14.5px}
+.en a{color:var(--blue-deep);font-weight:600}
 .steam path{animation:rise 3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
 .steam path:nth-child(2){animation-delay:.6s}
 .steam path:nth-child(3){animation-delay:1.2s}
@@ -50,6 +52,7 @@ p{margin:0 0 26px;color:var(--stone)}
   <h1>Cette page s'est évaporée.</h1>
   <p>Comme la vapeur d'un flat white, elle n'est plus là. La carte, les horaires et l'adresse vous attendent sur l'accueil.</p>
   <a class="btn" href="./">Retour à l'accueil</a>
+  <p class="en" lang="en">This page has evaporated. <a href="./?lang=en">Back to the homepage</a></p>
 </main>
 </body>
 </html>
