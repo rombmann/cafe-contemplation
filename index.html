@@ -84,7 +84,7 @@ nav a.nav-cta:hover{text-decoration:none;background:rgba(127,127,127,.16)}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,24,33,.5) 0%,rgba(15,24,33,.05) 28%,rgba(15,24,33,.12) 45%,rgba(15,24,33,.8) 100%);pointer-events:none}
 .hero-text{position:relative;z-index:1;padding:110px 0 44px;display:grid;gap:16px}
-.status{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;width:fit-content;padding:7px 14px;border-radius:999px;background:rgba(15,24,33,.6);backdrop-filter:blur(6px)}
+.status{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;width:fit-content;padding:7px 14px;border-radius:999px;background:rgba(15,24,33,.72)}
 .dot{width:9px;height:9px;border-radius:50%;background:#C9C6BF;flex:none}
 .status[data-state="open"] .dot{background:#6FCB8E}
 .status[data-state="soon"] .dot{background:#F0B45A}
@@ -96,7 +96,7 @@ nav a.nav-cta:hover{text-decoration:none;background:rgba(127,127,127,.16)}
 /* Contrôle vidéo : petite pastille discrète ; la zone cliquable reste de 44 px */
 .film-btn{position:absolute;right:14px;bottom:14px;z-index:2;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;cursor:pointer;display:grid;place-items:center;opacity:.55;transition:opacity .2s}
 .film-btn:hover,.film-btn:focus-visible{opacity:1}
-.film-btn i{width:28px;height:28px;border-radius:50%;background:rgba(15,24,33,.5);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.45);display:grid;place-items:center}
+.film-btn i{width:28px;height:28px;border-radius:50%;background:rgba(15,24,33,.62);border:1px solid rgba(255,255,255,.45);display:grid;place-items:center}
 .film-btn svg{width:10px;height:10px}
 
 /* Sections */
@@ -961,7 +961,14 @@ function zurichNow(){
   v.addEventListener("error", function(){ v.style.display = "none"; b.hidden = true; });   // le poster reste en fond
   b.addEventListener("click", function(){ if (v.paused) play(); else v.pause(); });
   sync();
-  if (!reduce && !save) play();
+  // Démarrage auto : l'image fixe reste affichée jusqu'à ce que la vidéo soit assez chargée pour ne pas s'interrompre.
+  if (!reduce && !save){
+    var started = false;
+    function start(){ if (started) return; started = true; play(); }
+    v.preload = "auto"; load();
+    v.addEventListener("canplaythrough", start, { once: true });
+    setTimeout(start, 6000);                  // filet de sécurité si le navigateur ne signale jamais « assez chargé »
+  }
 })();
 </script>
 </body>
