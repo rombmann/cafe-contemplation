@@ -124,6 +124,21 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 .portrait figcaption{margin-top:10px;font-family:var(--display);font-weight:600;color:var(--blue-deep);font-size:16px;line-height:1.3}
 .portrait figcaption small{display:block;font-family:var(--body);font-weight:400;font-size:12.5px;color:var(--stone);margin-top:2px}
 
+/* Grain 3D */
+.grain{padding:40px 0 64px;overflow:hidden}
+.grain-in{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;align-items:center}
+.grain h2{font-size:clamp(30px,4.4vw,50px);max-width:12ch}
+.grain-hint{margin:0;color:var(--stone);font-size:15px;opacity:0;transition:opacity .6s}
+.bean-on .grain-hint{opacity:1}
+.bean-stage{position:relative;height:clamp(300px,42vw,480px);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.bean-stage:active{cursor:grabbing}
+.bean-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1s ease}
+.bean-on .bean-stage canvas{opacity:1}
+.bean-shadow{position:absolute;left:50%;bottom:8%;width:46%;height:9%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(60,38,22,.32),rgba(60,38,22,0));filter:blur(4px);opacity:0;transition:opacity 1s ease}
+.bean-on .bean-shadow{opacity:1}
+.bean-off .bean-stage{display:none}
+.bean-off .grain-in{grid-template-columns:1fr}
+
 /* Menu */
 #carte{background:var(--paper);border-block:1px solid var(--line)}
 .menu-top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px 32px;margin-bottom:8px}
@@ -260,6 +275,9 @@ footer .brand{align-items:flex-start}
   .film-btn{top:70px;bottom:auto;right:8px}
   .story,.sweets{grid-template-columns:1fr;gap:32px}
   .story-img{aspect-ratio:4/3;order:-1}
+  .grain{padding:24px 0 40px}
+  .grain-in{grid-template-columns:1fr;gap:0}
+  .bean-stage{height:300px;margin-top:-6px}
   .portraits{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:420px}
   .frame span{font-size:60px}
   .cards{grid-template-columns:1fr;gap:6px}
@@ -363,6 +381,21 @@ footer .brand{align-items:flex-start}
         </div>
       </div>
       <img class="story-img" src="visuels/interieur.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La salle du Café Contemplation : comptoir en terrazzo, tables bleues et banquette en chêne">
+    </div>
+  </section>
+
+  <!-- ============ GRAIN 3D (dessiné en direct avec Three.js, voir le script « Grain de café 3D ») ============ -->
+  <section class="grain" id="grain" aria-labelledby="h-grain">
+    <div class="wrap grain-in">
+      <div class="grain-text">
+        <p class="kicker">Specialty coffee</p>
+        <h2 id="h-grain">Tout commence par un grain.</h2>
+        <p class="grain-hint">Faites-le tourner du doigt ou à la souris.</p>
+      </div>
+      <div class="bean-stage" id="bean-stage" aria-hidden="true">
+        <span class="bean-shadow"></span>
+        <canvas id="bean"></canvas>
+      </div>
     </div>
   </section>
 
@@ -992,6 +1025,136 @@ function zurichNow(){
     setTimeout(start, 6000);                  // filet de sécurité si le navigateur ne signale jamais « assez chargé »
   }
 })();
+</script>
+
+<!-- ---------- Grain de café 3D ----------
+     Three.js n'est téléchargé que lorsque la section approche de l'écran.
+     Sans WebGL ou si le chargement échoue, la section garde son texte et le grain est masqué. -->
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }</script>
+<script type="module">
+const section = document.getElementById("grain"), stage = document.getElementById("bean-stage"), canvas = document.getElementById("bean");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const near = new IntersectionObserver((es) => {
+  if (es.some((e) => e.isIntersecting)) { near.disconnect(); start().catch(() => section.classList.add("bean-off")); }
+}, { rootMargin: "600px 0px" });
+near.observe(section);
+
+async function start(){
+  const THREE = await import("three");
+  const { RoomEnvironment } = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js");
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
+  camera.position.set(0, 0, 7);
+
+  const key = new THREE.DirectionalLight(0xfff1dc, 2.2); key.position.set(-3, 4, 5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xbfd6ea, 1.1); rim.position.set(4, -1, -3); scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+
+  /* Forme du grain : ellipsoïde, face plate creusée d'une fente en S, petites irrégularités. */
+  function beanGeometry(seed){
+    const g = new THREE.SphereGeometry(1, 180, 120);
+    const pos = g.attributes.position, col = new Float32Array(pos.count * 3);
+    const v = new THREE.Vector3(), smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+    const base = new THREE.Color(0x4b2a16), dark = new THREE.Color(0x150a04), hi = new THREE.Color(0x6a3e22), c = new THREE.Color();
+    for (let i = 0; i < pos.count; i++){
+      v.fromBufferAttribute(pos, i);
+      let x = v.x * 1.0, y = v.y * 0.7, z = v.z * 0.5;  // ovale allongé, dos bombé
+      const front = smooth(0.0, 0.35, v.z);               // côté plat, où se trouve la fente
+      z *= 1 - 0.5 * front;
+      const cy = 0.09 * Math.sin(x * 2.9 + seed * 0.3);  // trajet de la fente en S
+      const w = 0.042 * (1 - 0.35 * x * x);
+      const along = Math.max(0, 1 - Math.pow(Math.abs(x) / 0.86, 8));
+      const d = (y - cy) / w;
+      const groove = Math.exp(-d * d) * along * front;
+      const lip = Math.exp(-Math.pow((Math.abs(y - cy) - w * 1.5) / (w * 0.8), 2)) * along * front;
+      z += -0.13 * groove + 0.014 * lip;
+      const n = 1 + 0.005 * (Math.sin(x * 7 + y * 4 + seed) + Math.sin(y * 9 - v.z * 5 + seed));
+      pos.setXYZ(i, x * n, y * n, z * n);
+      c.copy(base).lerp(hi, Math.max(0, 0.5 * lip + 0.3 * (1 - front) * Math.max(0, v.y))).lerp(dark, Math.min(1, groove * 1.6));
+      col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+    }
+    g.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    g.computeVertexNormals();
+    return g;
+  }
+  const mat = new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.52, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.45, sheen: 0.15, sheenRoughness: 0.7, sheenColor: new THREE.Color(0x7a5038) });
+
+  const main = new THREE.Mesh(beanGeometry(0), mat); scene.add(main);
+  const small = [
+    { mesh: new THREE.Mesh(beanGeometry(1.3), mat), s: 0.32, x: -1.75, y: 0.95, z: -1.2, ph: 0.0, rot: [0.9, 0.4, 0.6] },
+    { mesh: new THREE.Mesh(beanGeometry(2.1), mat), s: 0.24, x: 1.85, y: -0.85, z: -0.6, ph: 2.1, rot: [-0.5, 1.6, -0.3] }
+  ];
+  small.forEach((b) => { b.mesh.scale.setScalar(b.s); b.mesh.rotation.set(...b.rot); scene.add(b.mesh); });
+
+  /* Taille : suit la zone d'affichage ; les petits grains se rapprochent sur écran étroit. */
+  function resize(){
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    const narrow = w / h < 1.3;
+    small[0].x = narrow ? -1.2 : -1.75; small[1].x = narrow ? 1.25 : 1.85;
+    main.scale.setScalar(narrow ? 0.92 : 1);
+    draw(performance.now());
+  }
+
+  /* Rotation : lente toute seule, au doigt ou à la souris avec de l'élan, et inclinée par le défilement. */
+  let yaw = -0.6, vel = reduce ? 0 : 0.35, dragging = false, lastX = 0, lastT = 0, tilt = 0, tiltGoal = 0;
+  stage.addEventListener("pointerdown", (e) => { dragging = true; lastX = e.clientX; lastT = performance.now(); stage.setPointerCapture(e.pointerId); wake(); });
+  stage.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const now = performance.now(), dx = e.clientX - lastX, dt = Math.max(8, now - lastT);
+    yaw += dx * 0.012; vel = (dx * 0.012) / (dt / 1000); lastX = e.clientX; lastT = now; wake();
+  });
+  const release = () => { dragging = false; };
+  stage.addEventListener("pointerup", release); stage.addEventListener("pointercancel", release);
+
+  function scrollTilt(){
+    const r = section.getBoundingClientRect(), p = (innerHeight - r.top) / (innerHeight + r.height);   // 0 en bas de l'écran, 1 en haut
+    tiltGoal = (Math.min(1, Math.max(0, p)) - 0.5) * 0.9;
+  }
+  addEventListener("scroll", () => { scrollTilt(); wake(); }, { passive: true });
+
+  let visible = false, raf = 0, prev = performance.now();
+  function draw(now){
+    const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+    if (!dragging){
+      const cruise = reduce ? 0 : 0.35;
+      vel += (cruise - vel) * (1 - Math.exp(-dt * 1.6));              // l'élan retombe vers la rotation lente
+      yaw += vel * dt;
+    }
+    tilt += (tiltGoal - tilt) * (1 - Math.exp(-dt * 6));
+    main.rotation.set(-0.35 + tilt, yaw, 0.18);
+    const t = now / 1000;
+    small.forEach((b, i) => {
+      b.mesh.position.set(b.x, b.y + (reduce ? 0 : Math.sin(t * 0.9 + b.ph) * 0.08), b.z);
+      b.mesh.rotation.y = b.rot[1] + yaw * (i ? -0.6 : 0.8);
+      b.mesh.rotation.x = b.rot[0] + tilt * 0.6;
+    });
+    renderer.render(scene, camera);
+  }
+  function loop(now){
+    raf = 0;
+    draw(now);
+    const settling = Math.abs(tiltGoal - tilt) > 0.001 || dragging || Math.abs(vel) > 0.001;
+    if (visible && (!reduce || settling)) raf = requestAnimationFrame(loop);
+  }
+  function wake(){ if (visible && !raf){ prev = performance.now(); raf = requestAnimationFrame(loop); } }
+
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) wake(); }, { rootMargin: "80px 0px" }).observe(stage);
+  new ResizeObserver(resize).observe(stage);
+  scrollTilt(); tilt = tiltGoal; resize();
+  section.classList.add("bean-on");
+}
 </script>
 </body>
 </html>
