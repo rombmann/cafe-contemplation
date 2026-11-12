@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page introuvable · Café Contemplation</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#274E72">
+<!-- Adresse de base du site : sur GitHub Pages le site vit dans /cafe-contemplation/.
+     Sur le domaine définitif, remplacer par <base href="/">. -->
+<base href="/cafe-contemplation/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%234F82AD'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' font-weight='700' text-anchor='middle' fill='%23FBF8F1'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="visuels/icone-180.png">
+<style>
+@font-face{font-family:"Fraunces";font-weight:400 700;font-display:swap;src:url("fonts/fraunces-latin.woff2") format("woff2")}
+@font-face{font-family:"Figtree";font-weight:400 600;font-display:swap;src:url("fonts/figtree-latin.woff2") format("woff2")}
+@font-face{font-family:"Yellowtail";font-weight:400;font-display:swap;src:url("fonts/yellowtail-latin.woff2") format("woff2")}
+:root{--wall:#F5F0E4;--paper:#FBF8F1;--blue:#4F82AD;--blue-deep:#274E72;--oak:#C8A47C;--stone:#6A6863;--ink:#1F2B36;color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--wall);color:var(--ink);font:17px/1.6 "Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;display:grid;place-items:center;padding:24px 16px}
+main{max-width:520px;text-align:center}
+.brand{display:inline-flex;flex-direction:column;line-height:1;text-decoration:none;color:var(--blue-deep);margin-bottom:36px}
+.brand b{font:700 15px "Fraunces",Georgia,serif;letter-spacing:.14em}
+.brand span{font:400 25px "Yellowtail","Brush Script MT",cursive;color:var(--blue);margin-top:-2px}
+.cup{width:120px;height:auto;margin:0 auto 18px;display:block;color:var(--blue)}
+.kicker{font:400 30px/1 "Yellowtail","Brush Script MT",cursive;color:var(--blue);margin:0 0 6px}
+h1{font:600 clamp(28px,6vw,40px)/1.1 "Fraunces",Georgia,serif;margin:0 0 14px;text-wrap:balance}
+p{margin:0 0 26px;color:var(--stone)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 24px;border-radius:999px;background:var(--blue-deep);color:var(--paper);font-weight:600;text-decoration:none}
+.btn:hover{background:#1d3e5c}
+.btn:focus-visible{outline:3px solid #8FC0EA;outline-offset:3px}
+.steam path{animation:rise 3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.steam path:nth-child(2){animation-delay:.6s}
+.steam path:nth-child(3){animation-delay:1.2s}
+@keyframes rise{0%{opacity:0;transform:translateY(6px) scaleY(.7)}40%{opacity:.85}100%{opacity:0;transform:translateY(-10px) scaleY(1.1)}}
+@media (prefers-reduced-motion:reduce){.steam path{animation:none;opacity:.6}}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="./" aria-label="Café Contemplation, retour à l'accueil"><b>CAFÉ</b><span>Contemplation</span></a>
+  <svg class="cup" viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <g class="steam"><path d="M44 30c-6-8 6-12 0-20"/><path d="M60 30c-6-8 6-12 0-20"/><path d="M76 30c-6-8 6-12 0-20"/></g>
+    <path d="M24 42h68v18a30 30 0 0 1-30 30h-8a30 30 0 0 1-30-30z" fill="#FBF8F1"/>
+    <path d="M92 48h6a10 10 0 0 1 0 20h-8"/>
+    <path d="M14 94h92"/>
+  </svg>
+  <p class="kicker">Oups</p>
+  <h1>Cette page s'est évaporée.</h1>
+  <p>Comme la vapeur d'un flat white, elle n'est plus là. La carte, les horaires et l'adresse vous attendent sur l'accueil.</p>
+  <a class="btn" href="./">Retour à l'accueil</a>
+</main>
+</body>
+</html>

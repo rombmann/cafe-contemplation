@@ -6,6 +6,9 @@
 <title>Café Contemplation · Café de spécialité à Ouchy, Lausanne</title>
 <meta name="description" content="Café Contemplation : café de spécialité, matcha et douceurs maison à Ouchy, à deux pas du lac Léman. Avenue d'Ouchy 76, 1006 Lausanne. Ouvert du mercredi au dimanche.">
 <meta name="theme-color" content="#274E72">
+<!-- VERSION DE TEST : demande aux moteurs de recherche de ne pas référencer cette maquette
+     (horaires, prix et textes pas encore confirmés). À RETIRER à la mise en ligne définitive. -->
+<meta name="robots" content="noindex">
 <!-- ADRESSE DU SITE : version de test sur GitHub Pages.
      Au passage sur le domaine définitif (cafecontemplation.ch ?), remplacer
      https://rombmann.github.io/cafe-contemplation/ par la nouvelle adresse dans les 4 lignes ci-dessous. -->
@@ -27,10 +30,18 @@
 <meta name="apple-mobile-web-app-title" content="Contemplation">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%234F82AD'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' font-weight='700' text-anchor='middle' fill='%23FBF8F1'%3EC%3C/text%3E%3C/svg%3E">
 <link rel="preload" as="image" href="visuels/poster.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Yellowtail&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Polices hébergées sur le site (dossier fonts/, licences jointes) : aucune requête vers Google à l'affichage. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/fraunces-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/figtree-latin.woff2" crossorigin>
 <style>
+/* Fraunces et Figtree : SIL Open Font License 1.1 ; Yellowtail : Apache 2.0 (voir fonts/LICENCE-*.txt) */
+@font-face{font-family:"Figtree";font-style:normal;font-weight:400 600;font-display:swap;src:url("fonts/figtree-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:400 600;font-display:swap;src:url("fonts/figtree-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/fraunces-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/fraunces-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Yellowtail";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/yellowtail-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:"Yellowtail";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/yellowtail-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
 :root{
   /* Layout: one column that follows the visit — arrive (film), meet the owners, read the card, find the door.
      Single light theme by choice: the page borrows the café's own room. */
@@ -97,6 +108,11 @@ nav a.nav-cta:hover{text-decoration:none;background:rgba(127,127,127,.16)}
 .hero-text{position:relative;z-index:1;padding:110px 0 44px;display:grid;gap:16px}
 .status{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;width:fit-content;padding:7px 14px;border-radius:999px;background:rgba(15,24,33,.72)}
 .dot{width:9px;height:9px;border-radius:50%;background:#C9C6BF;flex:none}
+/* Bandeau de fermeture exceptionnelle (rempli depuis SITE_DATA.fermetures) */
+.notice{display:inline-flex;align-items:center;gap:8px;width:fit-content;max-width:100%;margin:0;padding:7px 14px;border-radius:999px;font-weight:600;font-size:14px;line-height:1.35;background:var(--paper);color:var(--blue-deep)}
+.notice[hidden]{display:none}
+.notice svg{width:17px;height:17px;flex:none}
+#infos .notice{background:rgba(255,255,255,.13);color:#fff;border-radius:12px;margin:0 0 12px}
 .status[data-state="open"] .dot{background:#6FCB8E}
 .status[data-state="soon"] .dot{background:#F0B45A}
 .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(38px,7vw,84px);line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.01em;max-width:14ch;text-shadow:0 2px 24px rgba(0,0,0,.4)}
@@ -174,7 +190,7 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 .s-milk{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round}
 .s-shadow{fill:none;stroke:rgba(39,78,114,.2);stroke-width:8.5;stroke-linecap:round}
 .pitcher{will-change:transform}
-.pour-on #menu li{opacity:.14;transition:opacity .6s ease}
+.pour-on #menu li{opacity:.32;transition:opacity .6s ease}   /* lisible avant le passage du lait, nette après */
 .pour-on #menu li.wet{opacity:1}
 .pour-end{display:grid;grid-template-columns:190px 1fr;gap:30px;align-items:center;padding-left:calc((100% - 88px)/3 + 22px - 95px)}
 .cup{width:190px;aspect-ratio:3/4;-webkit-mask-image:radial-gradient(ellipse 62% 64% at 50% 56%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 62% 64% at 50% 56%,#000 60%,transparent 100%)}
@@ -199,6 +215,25 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 .shots img{border-radius:18px;width:100%;aspect-ratio:1/1;object-fit:cover}
 .shots li.big{grid-column:span 2;grid-row:span 2}
 .shots li.big img{aspect-ratio:auto;height:100%}
+.shots .shot{display:block;height:100%;border-radius:18px;cursor:zoom-in}
+.shots .shot:focus-visible{outline-offset:-4px}
+
+/* Visionneuse de la galerie */
+.lightbox{padding:0;border:0;margin:0;width:100%;height:100%;max-width:none;max-height:none;background:rgba(12,18,24,.96);color:#fff;overflow:hidden}
+.lightbox[open]{display:grid;place-items:center}
+.lightbox::backdrop{background:transparent}
+html:has(.lightbox[open]){overflow:hidden}
+.lightbox figure{margin:0;display:grid;justify-items:center;gap:14px;padding:64px 16px 40px}
+.lightbox img{max-width:min(92vw,1400px);max-height:76vh;width:auto;height:auto;border-radius:12px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);animation:lbIn .3s ease both;user-select:none;-webkit-user-drag:none}
+.lightbox figcaption{max-width:60ch;text-align:center;font-size:14.5px;color:rgba(255,255,255,.85)}
+@keyframes lbIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.lb-btn{position:absolute;width:48px;height:48px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;transition:background .2s}
+.lb-btn:hover{background:rgba(255,255,255,.24)}
+.lb-btn svg{width:22px;height:22px}
+.lb-close{top:14px;right:14px}
+.lb-prev{left:14px;top:50%;margin-top:-24px}
+.lb-next{right:14px;top:50%;margin-top:-24px}
+.lb-count{position:absolute;top:26px;left:22px;margin:0;font-size:14px;color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
 
 /* Social proof */
 .proof{margin-top:40px;display:flex;align-items:center;justify-content:space-between;gap:16px 28px;flex-wrap:wrap;padding:24px 28px;border-radius:18px;background:var(--paper);border:1px solid var(--line)}
@@ -370,6 +405,7 @@ footer .brand{align-items:flex-start}
     <video id="film" muted loop playsinline preload="none" poster="visuels/poster.webp" aria-hidden="true" tabindex="-1"></video>
     <div class="wrap hero-text">
       <p class="status" id="status" role="status" aria-live="polite" data-state="closed" style="margin:0"><span class="dot" aria-hidden="true"></span><span data-status-text>Horaires ci-dessous</span></p>
+      <p class="notice" data-notice hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span></span></p>
       <!-- TEXTE : titre et sous-titre de l'accueil -->
       <h1>Une pause au bord du lac, <em>le temps d'un café.</em></h1>
       <p class="lede">Café de spécialité, matcha et douceurs maison à Ouchy, à deux pas du lac Léman à Lausanne.</p>
@@ -477,11 +513,12 @@ footer .brand{align-items:flex-start}
       <p class="kicker">En images</p>
       <h2 id="h-galerie">Le lieu, les tasses</h2>
       <ul class="shots">
-        <li class="big"><img src="visuels/facade.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La devanture du Café Contemplation, avenue d'Ouchy 76 à Lausanne"></li>
-        <li><img src="visuels/flat-white.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Flat white et son latte art sur une table bleue"></li>
-        <li><img src="visuels/boisson-matcha-rose-cookies.webp" width="560" height="560" loading="lazy" decoding="async" alt="Flat white, matcha rose glacé et cookies maison sur une table bleue"></li>
-        <li><img src="visuels/matcha.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Matcha latte glacé et latte glacé sur une table du café"></li>
-        <li><img src="visuels/boisson-flat-white-espresso-tonic.webp" width="720" height="720" loading="lazy" decoding="async" alt="Flat white au latte art en cygne et espresso tonic glacé"></li>
+        <!-- Chaque photo s'ouvre en grand au clic (visionneuse plus bas) ; sans script, le lien ouvre simplement l'image. -->
+        <li class="big"><a class="shot" href="visuels/facade.webp"><img src="visuels/facade.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La devanture du Café Contemplation, avenue d'Ouchy 76 à Lausanne"></a></li>
+        <li><a class="shot" href="visuels/flat-white.webp"><img src="visuels/flat-white.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Flat white et son latte art sur une table bleue"></a></li>
+        <li><a class="shot" href="visuels/boisson-matcha-rose-cookies.webp"><img src="visuels/boisson-matcha-rose-cookies.webp" width="560" height="560" loading="lazy" decoding="async" alt="Flat white, matcha rose glacé et cookies maison sur une table bleue"></a></li>
+        <li><a class="shot" href="visuels/matcha.webp"><img src="visuels/matcha.webp" width="1200" height="1490" loading="lazy" decoding="async" alt="Matcha latte glacé et latte glacé sur une table du café"></a></li>
+        <li><a class="shot" href="visuels/boisson-flat-white-espresso-tonic.webp"><img src="visuels/boisson-flat-white-espresso-tonic.webp" width="720" height="720" loading="lazy" decoding="async" alt="Flat white au latte art en cygne et espresso tonic glacé"></a></li>
       </ul>
 
       <div class="proof" id="avis">
@@ -507,6 +544,7 @@ footer .brand{align-items:flex-start}
       <div class="info">
         <div>
           <h3>Horaires</h3>
+          <p class="notice" data-notice hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span></span></p>
           <p class="now" data-state="closed"><span class="dot" aria-hidden="true"></span><span data-status-text></span></p>
           <table id="hours"><caption class="sr">Horaires d'ouverture par jour</caption><tbody></tbody></table>
         </div>
@@ -545,7 +583,7 @@ footer .brand{align-items:flex-start}
   <div class="wrap">
     <div>
       <a class="brand" href="#top" aria-label="Café Contemplation, retour en haut de page"><b>CAFÉ</b><span>Contemplation</span></a>
-      <p>Café de spécialité à Ouchy<br><span data-text="addressLine"></span></p>
+      <p>Café de spécialité à Ouchy<br><span data-text="addressLine"></span><br><span data-hours-summary></span></p>
     </div>
     <ul aria-label="Liens du site">
       <li><a href="#histoire">Le café</a></li>
@@ -563,6 +601,15 @@ footer .brand{align-items:flex-start}
     </p>
   </div>
 </footer>
+
+<!-- Visionneuse de la galerie (ouverte au clic sur une photo) -->
+<dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
+  <figure><img id="lb-img" alt=""><figcaption id="lb-cap" aria-hidden="true"></figcaption></figure>
+  <p class="lb-count" id="lb-count"></p>
+  <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Fermer la photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="lb-btn lb-prev" id="lb-prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lb-btn lb-next" id="lb-next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+</dialog>
 
 <!-- Barre d'actions mobile -->
 <div class="dock" role="navigation" aria-label="Actions rapides">
@@ -596,6 +643,15 @@ const SITE_DATA = {
     { day: "Samedi",   open: "09:00", close: "17:00" },
     { day: "Dimanche", open: "09:00", close: "17:00" }
   ],
+
+  /* --- Fermetures exceptionnelles (vacances, jours fériés…). Dates au format "AAAA-MM-JJ", « au » inclus ;
+         pour un seul jour, « au » peut être omis. Exemples :
+           { du: "2026-12-24", au: "2027-01-02", motif: "Vacances de fin d'année" },
+           { du: "2027-04-02", motif: "Vendredi saint" }
+         Un bandeau l'annonce en haut du site et dans les horaires quelques jours avant (réglage ci-dessous),
+         et le statut « Ouvert / Fermé » indique la date de réouverture. Retirer les fermetures passées de temps en temps. --- */
+  fermetures: [],
+  fermetureAnnonceJours: 14,
 
   /* --- Adresse et contact --- */
   contact: {
@@ -754,6 +810,43 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
   });
 })();
 
+/* ---------- Visionneuse de la galerie : clic/toucher pour agrandir, flèches ou balayage pour naviguer ---------- */
+(function lightbox(){
+  var dlg = document.getElementById("lightbox");
+  if (!dlg || typeof dlg.showModal !== "function") return;     // navigateur trop ancien : le lien ouvre l'image
+  var links = [].slice.call(document.querySelectorAll(".shots .shot"));
+  var img = document.getElementById("lb-img"), cap = document.getElementById("lb-cap"), count = document.getElementById("lb-count");
+  var idx = 0, opener = null, x0 = null;
+  function show(i){
+    idx = (i + links.length) % links.length;
+    var a = links[idx], t = a.querySelector("img");
+    img.style.animation = "none"; void img.offsetWidth; img.style.animation = "";   // relance le petit fondu
+    img.src = a.getAttribute("href"); img.alt = t.alt; cap.textContent = t.alt;
+    count.textContent = (idx + 1) + " / " + links.length;
+  }
+  links.forEach(function(a, i){
+    a.addEventListener("click", function(e){ e.preventDefault(); opener = a; show(i); dlg.showModal(); });
+  });
+  document.getElementById("lb-prev").addEventListener("click", function(){ show(idx - 1); });
+  document.getElementById("lb-next").addEventListener("click", function(){ show(idx + 1); });
+  document.getElementById("lb-close").addEventListener("click", function(){ dlg.close(); });
+  dlg.addEventListener("keydown", function(e){
+    if (e.key === "ArrowLeft"){ e.preventDefault(); show(idx - 1); }
+    if (e.key === "ArrowRight"){ e.preventDefault(); show(idx + 1); }
+  });
+  var swiped = false;
+  dlg.addEventListener("click", function(e){                    // clic à côté de la photo : fermer (sauf juste après un balayage)
+    if (swiped){ swiped = false; return; }
+    if (e.target === dlg || e.target.tagName === "FIGURE") dlg.close();
+  });
+  dlg.addEventListener("pointerdown", function(e){ x0 = e.clientX; swiped = false; });
+  dlg.addEventListener("pointerup", function(e){
+    if (x0 === null) return; var dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 50){ swiped = true; show(idx + (dx < 0 ? 1 : -1)); }
+  });
+  dlg.addEventListener("close", function(){ if (opener) opener.focus(); });
+})();
+
 /* ---------- Carte ---------- */
 (function renderMenu(){
   var root = document.getElementById("menu"), cols = {};
@@ -808,10 +901,19 @@ function mins(s){ var p = s.split(":"); return +p[0] * 60 + +p[1]; }
 })();
 
 /* ---------- Horaires et statut ouvert / fermé (heure suisse) ---------- */
+/* Dates « AAAA-MM-JJ » : calculées en UTC pour éviter les surprises du passage à l'heure d'été. */
+function addDays(s, n){ var p = s.split("-"); return new Date(Date.UTC(+p[0], p[1] - 1, +p[2] + n)).toISOString().slice(0, 10); }
+function frDate(s){ var p = s.split("-"); return new Intl.DateTimeFormat("fr-CH", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" }).format(new Date(Date.UTC(+p[0], p[1] - 1, +p[2]))); }
+function closureOn(s){                          // fermeture exceptionnelle qui couvre ce jour, sinon null
+  var list = SITE_DATA.fermetures || [];
+  for (var i = 0; i < list.length; i++){ var f = list[i]; if (s >= f.du && s <= (f.au || f.du)) return f; }
+  return null;
+}
 function computeStatus(now){
-  // now = { day: 0..6 (0 = lundi), minutes: minutes depuis minuit }
+  // now = { date: "AAAA-MM-JJ", day: 0..6 (0 = lundi), minutes: minutes depuis minuit }
   var H = SITE_DATA.hours, d = H[now.day], soon = SITE_DATA.closingSoonMinutes;
-  if (d && !d.closed){
+  var shut = now.date ? closureOn(now.date) : null;
+  if (!shut && d && !d.closed){
     var o = mins(d.open), c = mins(d.close);
     if (now.minutes >= o && now.minutes < c){
       return (c - now.minutes <= soon)
@@ -820,16 +922,40 @@ function computeStatus(now){
     }
     if (now.minutes < o) return { state: "closed", text: "Fermé · ouvre aujourd'hui à " + d.open };
   }
-  for (var i = 1; i <= 7; i++){
-    var n = H[(now.day + i) % 7];
-    if (n && !n.closed) return { state: "closed", text: "Fermé · ouvre " + (i === 1 ? "demain" : n.day.toLowerCase()) + " à " + n.open };
+  for (var i = 1; i <= 90; i++){                 // prochain jour ouvert, en sautant les fermetures exceptionnelles
+    var n = H[(now.day + i) % 7], date = now.date ? addDays(now.date, i) : null;
+    if (!n || n.closed || (date && closureOn(date))) continue;
+    var when = i === 1 ? "demain" : (i < 7 || !date) ? n.day.toLowerCase() : "le " + frDate(date);
+    return { state: "closed", text: (shut ? "Fermeture exceptionnelle · réouverture " : "Fermé · ouvre ") + when + " à " + n.open };
   }
   return { state: "closed", text: "Fermé" };
 }
+function closureNotice(today){                  // texte du bandeau : fermeture en cours ou dans les prochains jours
+  var next = null, horizon = addDays(today, SITE_DATA.fermetureAnnonceJours || 14);
+  (SITE_DATA.fermetures || []).forEach(function(f){
+    if ((f.au || f.du) < today || f.du > horizon) return;
+    if (!next || f.du < next.du) next = f;
+  });
+  if (!next) return "";
+  var end = next.au || next.du, txt;
+  if (end === next.du) txt = next.du <= today ? "Fermé aujourd'hui" : "Fermé le " + frDate(next.du);
+  else txt = next.du <= today ? "Fermé jusqu'au " + frDate(end) + " inclus" : "Fermé du " + frDate(next.du) + " au " + frDate(end);
+  return txt + (next.motif ? " · " + next.motif : "");
+}
+function hoursSummary(){                        // « Mer–Ven 07:30–16:00 · Sam–Dim 09:00–17:00 »
+  var H = SITE_DATA.hours, out = [], i = 0;
+  while (i < H.length){
+    var j = i, key = H[i].closed ? "x" : H[i].open + H[i].close;
+    while (j + 1 < H.length && (H[j + 1].closed ? "x" : H[j + 1].open + H[j + 1].close) === key) j++;
+    if (key !== "x") out.push(H[i].day.slice(0, 3) + (j > i ? "–" + H[j].day.slice(0, 3) : "") + " " + H[i].open + "–" + H[i].close);
+    i = j + 1;
+  }
+  return out.join(" · ");
+}
 function zurichNow(){
-  var parts = new Intl.DateTimeFormat("en-GB", { timeZone: SITE_DATA.timezone, weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+  var parts = new Intl.DateTimeFormat("en-GB", { timeZone: SITE_DATA.timezone, year: "numeric", month: "2-digit", day: "2-digit", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
   var o = {}; parts.forEach(function(p){ o[p.type] = p.value; });
-  return { day: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(o.weekday), minutes: (parseInt(o.hour, 10) % 24) * 60 + parseInt(o.minute, 10) };
+  return { date: o.year + "-" + o.month + "-" + o.day, day: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(o.weekday), minutes: (parseInt(o.hour, 10) % 24) * 60 + parseInt(o.minute, 10) };
 }
 (function hours(){
   var body = document.querySelector("#hours tbody");
@@ -839,7 +965,8 @@ function zurichNow(){
       el("td", { text: d.closed ? "Fermé" : d.open + " – " + d.close })
     ]));
   });
-  var last = "";
+  document.querySelectorAll("[data-hours-summary]").forEach(function(e){ e.textContent = hoursSummary(); });
+  var last = "", lastNotice = null;
   function refresh(){
     var now, s;
     try { now = zurichNow(); s = computeStatus(now); } catch (e) { return; }
@@ -848,6 +975,11 @@ function zurichNow(){
       tr.classList.toggle("today", today);
       if (today) tr.setAttribute("aria-current", "date"); else tr.removeAttribute("aria-current");
     });
+    var notice = closureNotice(now.date);
+    if (notice !== lastNotice){
+      lastNotice = notice;
+      document.querySelectorAll("[data-notice]").forEach(function(n){ n.querySelector("span").textContent = notice; n.hidden = !notice; });
+    }
     if (s.text === last) return;   // n'annonce que les changements
     last = s.text;
     document.querySelectorAll("[data-status-text]").forEach(function(t){
@@ -866,7 +998,8 @@ function zurichNow(){
     description: "Café de spécialité, matcha et douceurs maison à Ouchy, Lausanne.",
     address: { "@type": "PostalAddress", streetAddress: c.street, postalCode: c.postalCode, addressLocality: c.city, addressCountry: c.country },
     telephone: c.phone, email: c.email, sameAs: [c.instagramUrl], servesCuisine: "Café de spécialité", priceRange: "CHF", paymentAccepted: "Carte",
-    openingHoursSpecification: SITE_DATA.hours.map(function(d, i){ return d.closed ? null : { "@type": "OpeningHoursSpecification", dayOfWeek: en[i], opens: d.open, closes: d.close }; }).filter(Boolean),
+    openingHoursSpecification: SITE_DATA.hours.map(function(d, i){ return d.closed ? null : { "@type": "OpeningHoursSpecification", dayOfWeek: en[i], opens: d.open, closes: d.close }; }).filter(Boolean)
+      .concat((SITE_DATA.fermetures || []).map(function(f){ return { "@type": "OpeningHoursSpecification", opens: "00:00", closes: "00:00", validFrom: f.du, validThrough: f.au || f.du }; })),
     aggregateRating: { "@type": "AggregateRating", ratingValue: g.ratingValue, reviewCount: g.reviewCount }
   };
   var s = document.createElement("script"); s.type = "application/ld+json"; s.textContent = JSON.stringify(data); document.head.appendChild(s);
@@ -1082,7 +1215,7 @@ function zurichNow(){
 <!-- ---------- Grain de café 3D ----------
      Three.js n'est téléchargé que lorsque la section approche de l'écran.
      Sans WebGL ou si le chargement échoue, la section garde son texte et le grain est masqué. -->
-<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }</script>
+<script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js" } }</script>
 <script type="module">
 const section = document.getElementById("grain"), stage = document.getElementById("bean-stage"), canvas = document.getElementById("bean");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1094,7 +1227,7 @@ near.observe(section);
 
 async function start(){
   const THREE = await import("three");
-  const { RoomEnvironment } = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js");
+  const { RoomEnvironment } = await import("./vendor/three/RoomEnvironment.js");   // Three.js 0.160.0 (licence MIT), hébergé sur le site
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
