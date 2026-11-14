@@ -270,6 +270,24 @@ $("deconnexion").addEventListener("click", function(){
   api("deconnexion", { method: "POST", body: "{}" }).then(function(){ modifie = false; data = null; montrer("vue-connexion"); });
 });
 
+/* Après un enregistrement : vérifie toutes les 5 secondes que le site en ligne affiche bien
+   les nouvelles données, puis le dit clairement (au lieu d'un vague « dans une minute »). */
+var suivi = 0;
+function surveillerMiseEnLigne(attendu){
+  var id = ++suivi, debut = Date.now(), cible = JSON.stringify(attendu);
+  (function verifier(){
+    if (id !== suivi || modifie) return;   // un nouvel enregistrement ou une modification a pris le relais
+    fetch("/donnees.js?v=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.text(); }).then(function(t){
+      if (id !== suivi || modifie) return;
+      var m = /^window\.DONNEES\s*=/m.exec(t), enLigne = null;
+      try { enLigne = JSON.stringify(JSON.parse(t.slice(m.index + m[0].length, t.lastIndexOf("}") + 1))); } catch (e) {}
+      if (enLigne === cible){ etat("C'est en ligne ! Vos visiteurs voient déjà la nouvelle version.", "ok"); return; }
+      if (Date.now() - debut > 5 * 60 * 1000){ etat("C'est enregistré. La mise en ligne prend plus de temps que d'habitude : vérifiez le site dans quelques minutes.", ""); return; }
+      setTimeout(verifier, 5000);
+    }, function(){ setTimeout(verifier, 5000); });
+  })();
+}
+
 $("enregistrer").addEventListener("click", function(){
   if (enCours) return;
   enCours = true; $("enregistrer").disabled = true; etat("Enregistrement…");
@@ -279,7 +297,9 @@ $("enregistrer").addEventListener("click", function(){
       modifie = false;
       if (r.json.sha) sha = r.json.sha;
       if (r.json.donnees){ data = r.json.donnees; tout(); }
-      etat(r.json.inchange ? "Rien n'a changé." : "C'est enregistré ! Le site sera à jour dans une minute environ.", "ok");
+      if (r.json.inchange){ etat("Rien n'a changé.", "ok"); return; }
+      etat("C'est enregistré ! Mise en ligne en cours (environ une minute)…", "ok");
+      surveillerMiseEnLigne(r.json.donnees);
       return;
     }
     $("enregistrer").disabled = false;

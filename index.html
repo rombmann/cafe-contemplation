@@ -633,7 +633,8 @@ footer .brand{align-items:flex-start}
   <a data-href="tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.500 3.500h3l1.500 4-2 1.500a12 12 0 0 0 6 6l1.500-2 4 1.500v3a2 2 0 0 1-2.200 2A17 17 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z"/></svg><span data-i18n="dockCall">Appeler</span></a>
 </div>
 
-<script src="donnees.js"></script>
+<!-- Données du café, rechargées à chaque visite (jamais une version en cache) : les changements faits dans l'admin s'affichent tout de suite -->
+<script>document.write('<script src="donnees.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 /* =====================================================================
    MODIFIER LES DONNÉES DU SITE ICI
