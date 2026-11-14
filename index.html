@@ -175,8 +175,8 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 /* Menu */
 #carte{background:var(--paper);border-block:1px solid var(--line)}
 .menu-top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px 32px;margin-bottom:8px}
-.story-media{position:relative;align-self:start}
-.tasse3d{position:absolute;z-index:2;top:-44px;left:-64px;width:190px;aspect-ratio:1/1;box-shadow:0 0 0 7px var(--wall),0 18px 36px -16px rgba(39,78,114,.5);border-radius:100px 100px 14px 14px;overflow:hidden;border:1.5px solid var(--line);background:#E6D7BE}
+.story-media{position:relative;align-self:start;margin-top:120px}   /* place pour la tasse au-dessus de la photo */
+.tasse3d{position:absolute;z-index:2;top:-130px;right:28px;width:150px;aspect-ratio:1/1;box-shadow:0 0 0 7px var(--wall),0 18px 36px -16px rgba(39,78,114,.5);border-radius:100px 100px 14px 14px;overflow:hidden;border:1.5px solid var(--line);background:#E6D7BE}
 .tasse3d::after{content:"";position:absolute;inset:8px;border-radius:92px 92px 8px 8px;border:1px solid rgba(255,255,255,.8);pointer-events:none}   /* même cadre en arche que les portraits */
 .tasse3d video{width:100%;height:100%;object-fit:cover;display:block}
 .menu-head{position:relative;min-height:96px;display:flex;align-items:flex-end}
@@ -351,8 +351,8 @@ footer .brand{align-items:flex-start}
   .film-btn{top:70px;bottom:auto;right:8px}
   .story,.sweets{grid-template-columns:1fr;gap:32px}
   .story-img{aspect-ratio:4/3}
-  .story-media{order:-1;margin-bottom:56px}
-  .tasse3d{top:auto;left:auto;right:14px;bottom:-56px;width:min(150px,40vw)}
+  .story-media{order:-1;margin:0 0 96px}
+  .tasse3d{top:auto;right:16px;bottom:-112px;width:min(132px,36vw)}
   .grain{padding:0 0 32px}
   .grain-in{gap:4px}
   .bean-stage{width:96px;height:84px}
