@@ -174,7 +174,9 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 
 /* Menu */
 #carte{background:var(--paper);border-block:1px solid var(--line)}
-.menu-top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px 32px;margin-bottom:8px}
+.menu-top{display:grid;grid-template-columns:1fr auto auto;align-items:end;gap:16px 32px;margin-bottom:8px}
+.tasse3d{width:250px;aspect-ratio:4/3;align-self:center;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 62%,transparent 100%)}
+.tasse3d video{width:100%;height:100%;object-fit:cover;display:block}
 .menu-head{position:relative;min-height:96px;display:flex;align-items:flex-end}
 .menu-head h2{margin:0}
 .pitcher{position:absolute;bottom:-58px;left:230px;width:260px;height:auto;max-width:none;pointer-events:none;display:none;transform-origin:50% 50%;filter:drop-shadow(0 6px 10px rgba(39,78,114,.18))}
@@ -356,6 +358,7 @@ footer .brand{align-items:flex-start}
   #carte > .wrap{display:flex;flex-direction:column}
   .menu-top{display:contents}
   .menu-head{order:1;min-height:84px}
+  .tasse3d{order:0;width:min(260px,70vw);margin:0 auto -6px}
   .pour-zone{order:2}
   .legend{order:3;align-items:flex-start;margin:22px 0 0}
   .sweets{order:4}
@@ -488,6 +491,8 @@ footer .brand{align-items:flex-start}
         <!-- Pot à lait : le filet de lait en part. Purement décoratif. -->
         <img class="pitcher" id="pitcher" src="visuels/pot-a-lait.webp" width="480" height="480" alt="" aria-hidden="true" decoding="async">
       </div>
+        <!-- Tasse 3D (vidéo générée) : fait un demi-tour quand la carte arrive à l'écran. Purement décorative. -->
+        <div class="tasse3d" aria-hidden="true"><video id="tasse3d" muted playsinline preload="none" poster="visuels/tasse-3d.webp" tabindex="-1" disablepictureinpicture></video></div>
         <ul class="legend" aria-label="Légende de la carte" data-i18n-attr="aria-label:legendLabel">
           <li><span class="heart" aria-hidden="true">♥</span> <span data-i18n="legendFav">Coup de cœur de la maison</span></li>
           <li><span class="tag" data-i18n="tagHot">chaud</span><span class="tag cold" data-i18n="tagIced">glacé</span> <span data-i18n="legendTemp">Servi chaud ou glacé</span></li>
@@ -1322,6 +1327,24 @@ var HOURS = (function hours(){
   document.querySelectorAll(".story-text,.story-img,.sweets > *,.shots li,.proof,.info > div").forEach(function(n, i){
     n.classList.add("rv"); n.style.transitionDelay = (i % 3) * 90 + "ms"; io.observe(n);
   });
+})();
+
+/* ---------- Tasse 3D en haut de la carte ----------
+   Chargée seulement quand la carte approche ; fait un demi-tour à chaque arrivée à l'écran, puis s'arrête.
+   Réduire les animations : l'image fixe reste. */
+(function tasse3d(){
+  var v = document.getElementById("tasse3d");
+  if (!v || !("IntersectionObserver" in window)) return;
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var charge = false;
+  new IntersectionObserver(function(es){
+    if (!charge && es[0].isIntersecting){ charge = true; v.preload = "auto"; v.src = "video/tasse-3d.mp4"; }
+  }, { rootMargin: "600px 0px" }).observe(v);
+  new IntersectionObserver(function(es){
+    if (es[0].isIntersecting){ try { v.currentTime = 0; } catch (e) {} var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+    else v.pause();
+  }, { threshold: 0.6 }).observe(v);
+  v.addEventListener("error", function(){ v.removeAttribute("src"); v.load(); });   // l'image fixe reste
 })();
 
 /* ---------- Vidéo d'accueil ----------
