@@ -73,14 +73,17 @@
       });
     }
     var verre = recette.pot === "verre" || recette.pot === "petite";
-    return '<svg viewBox="0 0 40 48" aria-hidden="true" focusable="false" class="' + (grand ? "tasse-g" : "tasse-p") + '">' +
+    // Traits écrits directement dans le dessin : il peut ainsi devenir une simple image (voir decorer)
+    var sw = grand ? 1.6 : 2, trait = ' fill="none" stroke="#274E72" stroke-linejoin="round" stroke-linecap="round" stroke-width="';
+    var tr1 = trait + sw + '"', trv = trait + (verre ? (grand ? 1.3 : 1.7) : sw) + '"';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 48" aria-hidden="true" focusable="false" class="' + (grand ? "tasse-g" : "tasse-p") + '">' +
       '<defs><clipPath id="' + id + '"><path d="' + p.inside + '"/></clipPath></defs>' +
       (verre ? '<path d="' + p.inside + '" fill="#fff" fill-opacity=".55"/>' : "") +
       '<g clip-path="url(#' + id + ')">' + s + '</g>' +
-      (p.handle ? '<path d="' + p.handle + '" class="trait"/>' : "") +
-      (p.saucer ? '<path d="' + p.saucer + '" class="trait"/>' : "") +
-      '<path d="' + p.inside + '" class="trait' + (verre ? " verre" : "") + '"/>' +
-      (verre ? '<path d="M' + (recette.pot === "verre" ? 12.6 : 13.2) + ' ' + (p.top + 4) + 'v' + (h * .55).toFixed(1) + '" class="reflet"/>' : "") +
+      (p.handle ? '<path d="' + p.handle + '"' + tr1 + '/>' : "") +
+      (p.saucer ? '<path d="' + p.saucer + '"' + tr1 + '/>' : "") +
+      '<path d="' + p.inside + '"' + trv + '/>' +
+      (verre ? '<path d="M' + (recette.pot === "verre" ? 12.6 : 13.2) + ' ' + (p.top + 4) + 'v' + (h * .55).toFixed(1) + '" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4" stroke-linecap="round"/>' : "") +
       '</svg>';
   }
 
@@ -95,11 +98,14 @@
   function decorer(){
     indexer();
     document.querySelectorAll("#menu li .name").forEach(function(n){
-      if (n.querySelector(".tasse-p")) return;
+      if (n.querySelector(".mini")) return;
       var txt = (n.firstChild && n.firstChild.nodeType === 3 ? n.firstChild.nodeValue : "").trim(), cle = index[txt];
       if (!cle) return;
       var span = document.createElement("span");
-      span.className = "mini"; span.innerHTML = svg(R[cle], false);
+      // Simple image plutôt que dessin vectoriel dans la page : le navigateur la dessine une fois, puis n'a plus à la refaire au défilement
+      var img = new Image(22, 26); img.alt = ""; img.decoding = "async"; img.draggable = false;
+      img.src = "data:image/svg+xml," + encodeURIComponent(svg(R[cle], false));
+      span.className = "mini"; span.setAttribute("aria-hidden", "true"); span.appendChild(img);
       n.insertBefore(span, n.firstChild);
     });
   }

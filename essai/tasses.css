@@ -1,5 +1,5 @@
 /* ESSAI : tasses dessinées (page de test essai-tasses.html) */
-.essai-bandeau{position:fixed;left:12px;bottom:calc(var(--bar-h, 0px) + 12px);z-index:999;background:#FFF1A8;color:#3d3300;border:1px solid #e8d77a;border-radius:999px;padding:5px 14px;font:600 12.5px var(--body);box-shadow:0 6px 18px -8px rgba(0,0,0,.35);white-space:nowrap}
+.essai-bandeau{position:fixed;left:12px;bottom:calc(var(--bar-h, 0px) + 12px);z-index:999;background:#FFF1A8;color:#3d3300;border:1px solid #e8d77a;border-radius:999px;padding:5px 14px;font:600 12.5px var(--body);white-space:nowrap}
 
 /* Traits communs des dessins */
 .tasse-p .trait,.tasse-g .trait{fill:none;stroke:var(--blue-deep);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
@@ -8,13 +8,13 @@
 
 /* 1. Petites tasses dans la carte */
 .card .name .mini{display:inline-flex;width:22px;height:26px;margin:-4px 2px -4px -2px;flex:none}
-.card .name .mini svg{width:100%;height:100%;overflow:visible;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
-.card li:hover .mini svg{transform:translateY(-2px) rotate(-6deg)}
+.card .name .mini img{width:100%;height:100%;display:block;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.card li:hover .mini img{transform:translateY(-2px) rotate(-6deg)}
 .tasse-p .trait{stroke-width:2}
 .tasse-p .trait.verre{stroke-width:1.7}
 
 /* 2. Guide « Dans votre tasse » */
-.guide{margin:12px 0 0;padding:28px 28px 22px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.guide{contain:layout paint;margin:12px 0 0;padding:28px 28px 22px;border-radius:22px;background:#fff;border:1px solid var(--line)}
 .guide-top{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap}
 .guide h3{font-family:var(--display);font-weight:600;color:var(--blue-deep);font-size:30px;line-height:1.1;margin:0}
 .guide-sub{margin:6px 0 0;color:var(--stone);font-size:15px;max-width:46ch}
