@@ -85,7 +85,7 @@ a{color:var(--blue-deep)}
 
 /* Header: clear over the film, solid once the page scrolls past it */
 header{position:fixed;inset:0 0 auto 0;z-index:20;color:#fff;transition:background .25s,color .25s,border-color .25s;border-bottom:1px solid transparent}
-header.solid,header.open{background:color-mix(in srgb,var(--wall) 96%,transparent);backdrop-filter:blur(8px);color:var(--ink);border-bottom-color:var(--line)}
+header.solid,header.open{background:var(--wall);color:var(--ink);border-bottom-color:var(--line)}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
 .brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;color:inherit}
 .brand b{font-family:var(--display);font-weight:700;letter-spacing:.14em;font-size:15px}
@@ -376,7 +376,7 @@ footer .brand{align-items:flex-start}
   .proof{padding:20px}
   .stack{justify-items:stretch}
   footer .wrap{grid-template-columns:1fr}
-  .dock{position:fixed;left:0;right:0;bottom:0;z-index:25;height:var(--bar-h);display:grid;grid-template-columns:repeat(3,1fr);background:color-mix(in srgb,var(--paper) 97%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  .dock{position:fixed;left:0;right:0;bottom:0;z-index:25;height:var(--bar-h);display:grid;grid-template-columns:repeat(3,1fr);background:var(--paper);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
   .dock a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;color:var(--blue-deep);font:600 12.5px var(--body)}
   .dock a+a{border-left:1px solid var(--line)}
   .dock svg{width:21px;height:21px}
@@ -1199,7 +1199,7 @@ var HOURS = (function hours(){
 
   var paths = svg.querySelectorAll("path"), milk = paths[1], rows = [];
   var H = 0, len = 0, top0 = 0, zoneY = 0, cupH = 0, vReady = false, vAsked = false, target = 0;
-  var goal = 0, cur = null, loop = 0, lastT = 0;
+  var goal = 0, cur = null, loop = 0, lastT = 0, last = {};
   document.documentElement.classList.add("pour-on");
   cup.poster = "visuels/latte-debut.webp";
 
@@ -1234,7 +1234,7 @@ var HOURS = (function hours(){
     pitcher.style.left = left + "px";
     pitcher.dataset.flip = small ? "" : "1";
     pitcher.dataset.tx = (fx - 0.5) * pw; pitcher.dataset.ty = (SPOUT.y - 0.5) * pitcher.offsetHeight;   // bec, mesuré depuis le centre
-    pitcher.style.transform = "none";
+    pitcher.style.transform = "none"; last = {};
     var pr = pitcher.getBoundingClientRect();
     var sx = pr.left - zr.left + fx * pr.width, sy = pr.top - zr.top + SPOUT.y * pr.height;
     top0 = sy;
@@ -1276,13 +1276,15 @@ var HOURS = (function hours(){
     var q = Math.max(0, Math.min(1, (S - S2) / FILL));             // 2. la tasse se remplit
     var r = Math.max(0, Math.min(1, (S - S2 - FILL) / TAIL));      // 3. le filet se tarit
     var head = p * len, tail = r * len, vis = Math.max(0, head - tail);
-    paths.forEach(function(x){
-      x.style.strokeDasharray = "0 " + tail + " " + vis + " " + (len + 10);
-      x.style.visibility = vis > 1 ? "visible" : "hidden";
-    });
+    var dash = "0 " + tail.toFixed(1) + " " + vis.toFixed(1) + " " + (len + 10).toFixed(1), shown = vis > 1 ? "visible" : "hidden";
+    if (dash !== last.dash || shown !== last.shown){      // rien n'est réécrit quand le filet ne bouge pas (hors de l'écran par exemple)
+      last.dash = dash; last.shown = shown;
+      paths.forEach(function(x){ x.style.strokeDasharray = dash; x.style.visibility = shown; });
+    }
     var tilt = (1 - Math.min(1, p / 0.04)) * (r > 0 ? 0 : 1) + r;   // le pot se redresse avant et après le versement
     var flip = !!pitcher.dataset.flip, tx = +pitcher.dataset.tx || 0, ty = +pitcher.dataset.ty || 0;
-    pitcher.style.transform = "translate(" + tx + "px," + ty + "px) rotate(" + (tilt * 16 * (flip ? -1 : 1)) + "deg) translate(" + (-tx) + "px," + (-ty) + "px)" + (flip ? " scaleX(-1)" : "");   // pivote autour du bec
+    var tf = "translate(" + tx + "px," + ty + "px) rotate(" + (tilt * 16 * (flip ? -1 : 1)).toFixed(2) + "deg) translate(" + (-tx) + "px," + (-ty) + "px)" + (flip ? " scaleX(-1)" : "");   // pivote autour du bec
+    if (tf !== last.tf){ last.tf = tf; pitcher.style.transform = tf; }
     var front = top0 + p * (H - top0);
     rows.forEach(function(w){ if (!w.done && front >= w.y){ w.done = true; w.el.classList.add("wet"); } });
     if (S > -window.innerHeight) loadVideo();                       // charge la vidéo un écran avant d'en avoir besoin
@@ -1343,12 +1345,19 @@ var HOURS = (function hours(){
   }
   v.addEventListener("play", sync); v.addEventListener("pause", sync); window.addEventListener("langchange", sync);
   v.addEventListener("error", function(){ v.style.display = "none"; b.hidden = true; });   // le poster reste en fond
-  b.addEventListener("click", function(){ if (v.paused) play(); else v.pause(); });
+  b.addEventListener("click", function(){ userPaused = !v.paused; if (v.paused) play(); else v.pause(); });
+  // Hors de l'écran, la vidéo se met en pause (le téléphone n'a plus à la décoder pendant qu'on lit la carte), et reprend au retour
+  var userPaused = false, autoPaused = false, off = false;
+  if ("IntersectionObserver" in window) new IntersectionObserver(function(es){
+    var on = es[0].isIntersecting; off = !on;
+    if (!on && !v.paused){ autoPaused = true; v.pause(); }
+    else if (on && autoPaused && !userPaused){ autoPaused = false; play(); }
+  }).observe(v);
   sync();
   // Démarrage auto : l'image fixe reste affichée jusqu'à ce que la vidéo soit assez chargée pour ne pas s'interrompre.
   if (!reduce && !save){
     var started = false;
-    function start(){ if (started) return; started = true; play(); }
+    function start(){ if (started) return; started = true; if (off){ autoPaused = true; return; } play(); }   // déjà plus bas dans la page : elle partira au retour
     v.preload = "auto"; load();
     v.addEventListener("canplaythrough", start, { once: true });
     setTimeout(start, 6000);                  // filet de sécurité si le navigateur ne signale jamais « assez chargé »
