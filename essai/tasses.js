@@ -132,7 +132,7 @@
       var titre = item ? tr(item, "name") : n;
       var couches = r.c.slice().reverse().map(function(l){ return '<li><i style="background:' + COUL[l[0]] + '"></i>' + nom(l[0]) + '</li>'; }).join("") +
         (r.ice ? '<li><i class="ice"></i>' + nom("glace") + '</li>' : "");
-      html += '<li class="carte-tasse" style="--d:' + (i * 70) + 'ms">' + svg(r, true) +
+      html += '<li class="carte-tasse" style="--d:' + (i * 70) + 'ms"><img src="data:image/svg+xml,' + encodeURIComponent(svg(r, true)) + '" width="110" height="132" alt="" decoding="async" draggable="false">' +
         '<b>' + titre + '</b>' + (item ? '<span class="px">CHF ' + item.price.toFixed(2) + '</span>' : "") +
         '<ul class="couches">' + couches + '</ul></li>';
     });

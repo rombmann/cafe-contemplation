@@ -24,9 +24,7 @@
 .rangee{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:14px}
 .carte-tasse{display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 8px 12px;border-radius:16px;background:var(--paper);opacity:0;transform:translateY(14px);transition:opacity .6s ease var(--d),transform .6s cubic-bezier(.2,.8,.2,1) var(--d)}
 .guide.vu .carte-tasse{opacity:1;transform:none}
-.carte-tasse svg{width:110px;height:132px;overflow:visible}
-.carte-tasse .ly{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);transition:transform .7s cubic-bezier(.2,.8,.2,1)}
-.guide.vu .carte-tasse .ly{transform:scaleY(1)}
+.carte-tasse img{width:110px;height:132px;display:block}
 .carte-tasse b{font-family:var(--display);color:var(--blue-deep);font-size:16.5px;line-height:1.2;margin-top:10px}
 .carte-tasse .px{font-size:13px;color:var(--stone);font-variant-numeric:tabular-nums}
 .couches{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:3px;font-size:12.5px;color:var(--ink);text-align:left}
@@ -37,15 +35,9 @@
 .echelle i{flex:1;height:6px;border-radius:6px;background:linear-gradient(90deg,#4A2A1A,#B97C45 45%,#EFE2CB)}
 .guide-note{margin:12px 0 0;font-size:12px;color:var(--stone)}
 
-/* Animation des couches, décalée pour chaque tasse */
-.carte-tasse .ly:nth-of-type(1){transition-delay:calc(var(--d) + .15s)}
-.carte-tasse .ly:nth-of-type(2){transition-delay:calc(var(--d) + .35s)}
-.carte-tasse .ly:nth-of-type(3){transition-delay:calc(var(--d) + .55s)}
-.carte-tasse .ly:nth-of-type(4){transition-delay:calc(var(--d) + .75s)}
 
 @media (max-width:900px){
-  .rangee{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:150px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;margin-inline:-28px;padding-inline:28px;scroll-padding-inline:28px}
-  .carte-tasse{scroll-snap-align:start}
+  .rangee{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:150px;overflow-x:auto;padding-bottom:8px;margin-inline:-28px;padding-inline:28px;scroll-padding-inline:28px}
 }
 @media (max-width:700px){
   .guide{order:3;margin-top:28px;padding:22px 18px 18px;border-radius:18px}
@@ -53,5 +45,5 @@
   .rangee{margin-inline:-18px;padding-inline:18px;scroll-padding-inline:18px;grid-auto-columns:140px}
 }
 @media (prefers-reduced-motion:reduce){
-  .carte-tasse,.carte-tasse .ly{transition:none;opacity:1;transform:none}
+  .carte-tasse{transition:none;opacity:1;transform:none}
 }
