@@ -1334,7 +1334,7 @@ var HOURS = (function hours(){
   var save = navigator.connection && navigator.connection.saveData;
   var small = window.matchMedia && window.matchMedia("(max-width: 700px)").matches;
   var loaded = false;
-  function load(){ if (loaded) return; loaded = true; v.src = small ? "video/drone-mobile.mp4" : "video/drone.mp4"; }
+  function load(){ if (loaded) return; loaded = true; v.src = small ? "video/drone-mobile-hd.mp4" : "video/drone.mp4"; }
   function play(){ load(); var p = v.play(); if (p && p.catch) p.catch(function(){}); }
   function sync(){
     var on = !v.paused;
