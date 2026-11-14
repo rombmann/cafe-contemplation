@@ -17,7 +17,8 @@ horaires, fermetures exceptionnelles, carte et prix, douceurs, note Google.
 - Conséquence pour nous deux : **toujours `git pull --rebase` avant de travailler**. Le café peut avoir modifié
   `donnees.js` depuis l'admin.
 - GitHub Pages (`rombmann.github.io/cafe-contemplation`) continue d'afficher le site, mais l'admin n'y fonctionne pas
-  (pas de serveur) : la page `/admin` y affiche un message d'explication.
+  (pas de serveur) : la page `/admin` y redirige automatiquement vers l'admin Cloudflare
+  (adresse dans `ADMIN_URL`, en haut de `admin/index.html`, à changer si l'adresse du site change).
 
 ## Installation (une fois, environ 20 minutes)
 
