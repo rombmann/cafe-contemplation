@@ -2,7 +2,8 @@
 
 Deux personnes travaillent sur ce site, chacune avec son propre Claude, dans ce même dépôt GitHub
 (`rombmann/cafe-contemplation`). Le site en ligne : https://rombmann.github.io/cafe-contemplation/
-(GitHub Pages publie automatiquement la branche `main`, environ une minute après chaque `git push`).
+(GitHub Pages publie automatiquement la branche `main`, environ une minute après chaque `git push`, et le Worker
+Cloudflare qui porte l'admin aussi, voir `ADMIN.md`).
 
 ## Avant de commencer quoi que ce soit
 
@@ -33,10 +34,11 @@ Deux personnes travaillent sur ce site, chacune avec son propre Claude, dans ce 
   **Le café modifie ce fichier lui-même depuis l'admin** (`/admin`, voir `ADMIN.md`) : chaque enregistrement
   est un commit « Admin du café : … » sur `main`. D'où l'importance du `git pull --rebase` avant de travailler.
   Si on modifie `donnees.js` à la main, garder un JSON valide (guillemets doubles, pas de virgule finale)
-  et respecter les règles de `functions/_lib/donnees.js` (sinon l'admin refusera d'enregistrer).
-- `admin/` (page d'administration) et `functions/` (vérification du mot de passe et enregistrement, Cloudflare
-  Pages Functions) : ne jamais y mettre de secret. Les secrets sont dans les réglages Cloudflare et, pour les tests
-  locaux, dans `.dev.vars` (ignoré par git).
+  et respecter les règles de `worker/donnees.js` (sinon l'admin refusera d'enregistrer).
+- `admin/` (page d'administration) et `worker/` (Worker Cloudflare : vérification du mot de passe et enregistrement,
+  configuré par `wrangler.jsonc`) : ne jamais y mettre de secret. Les secrets sont dans les réglages Cloudflare et,
+  pour les tests locaux, dans `.dev.vars` (ignoré par git). `.assetsignore` liste les fichiers jamais publiés
+  (à compléter si on ajoute des fichiers internes à la racine).
 - Version anglaise : champs `_en` dans `SITE_DATA`, et bloc « TEXTES EN ANGLAIS » pour les textes fixes
   (clés `data-i18n` dans le HTML). Toute modification d'un texte français doit aussi mettre à jour l'anglais.
 - `visuels/`, `video/` : images et vidéos optimisées pour le web. `fonts/` et `vendor/three/` : polices et Three.js

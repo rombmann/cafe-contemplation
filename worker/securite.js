@@ -2,10 +2,10 @@
    Sécurité de l'admin : mot de passe, session, protection contre les essais
    répétés et les requêtes venues d'autres sites.
 
-   Variables à définir dans Cloudflare (Settings → Variables and Secrets) :
+   Secrets à définir dans Cloudflare (Worker → Settings → Variables and Secrets) :
      ADMIN_PASSWORD   mot de passe de l'admin (long, donné au café)
      SESSION_SECRET   longue chaîne aléatoire (jamais communiquée)
-   Facultatif : un espace KV lié sous le nom ADMIN_KV, pour bloquer
+   Facultatif : un espace KV lié sous le nom ADMIN_KV (dans wrangler.jsonc), pour bloquer
    durablement une adresse après 5 essais ratés (15 minutes).
    ===================================================================== */
 

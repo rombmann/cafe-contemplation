@@ -1,9 +1,9 @@
 /* =====================================================================
    Lecture et écriture de donnees.js dans le dépôt GitHub.
    Chaque enregistrement de l'admin devient un commit sur la branche main ;
-   Cloudflare Pages republie alors le site automatiquement (environ 1 minute).
+   Cloudflare redéploie alors le Worker automatiquement (environ 1 minute).
 
-   Variables à définir dans Cloudflare :
+   Secrets à définir dans Cloudflare :
      GITHUB_TOKEN   jeton « fine-grained » limité au dépôt, droit Contents : Read and write
      GITHUB_REPO    facultatif, par défaut rombmann/cafe-contemplation
      GITHUB_BRANCH  facultatif, par défaut main

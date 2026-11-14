@@ -1,0 +1,10 @@
+# Fichiers du dépôt à NE PAS publier sur le site (le reste du dossier est servi tel quel)
+.git
+.gitignore
+.assetsignore
+.dev.vars
+.wrangler
+node_modules
+worker
+wrangler.jsonc
+*.md

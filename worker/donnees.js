@@ -1,6 +1,6 @@
 /* =====================================================================
    Données modifiables depuis l'admin : lecture, vérification, écriture.
-   Utilisé par les fonctions Cloudflare (functions/api/*) et par les tests.
+   Utilisé par le Worker Cloudflare (worker/index.js) et par les tests.
    Le fichier du site s'appelle donnees.js et contient :
        window.DONNEES = { ...JSON... };
    ===================================================================== */

@@ -1,0 +1,28 @@
+// Configuration du Worker Cloudflare (déployé automatiquement à chaque push sur main).
+// Détails et installation : ADMIN.md.
+{
+  // Doit correspondre au nom du Worker créé dans le tableau de bord Cloudflare.
+  "name": "cafe-contemplation",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-11-01",
+
+  // Les fichiers du site : servis tels quels. Les fichiers exclus sont listés dans .assetsignore.
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Seules les adresses /api/… passent par le code du Worker.
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Les secrets (ADMIN_PASSWORD, SESSION_SECRET, GITHUB_TOKEN) se règlent dans le tableau de bord
+  // et ne sont pas effacés par les déploiements. Ne jamais les écrire dans ce fichier.
+  "keep_vars": true,
+
+  // Facultatif : blocage durable après 5 mots de passe faux. Créer un espace KV dans Cloudflare,
+  // puis décommenter et coller son identifiant (l'identifiant n'est pas un secret).
+  // "kv_namespaces": [{ "binding": "ADMIN_KV", "id": "COLLER_ICI_L_IDENTIFIANT" }],
+
+  "observability": { "enabled": true }
+}
