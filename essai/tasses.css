@@ -1,0 +1,57 @@
+/* ESSAI : tasses dessinées (page de test essai-tasses.html) */
+.essai-bandeau{position:fixed;left:12px;bottom:calc(var(--bar-h, 0px) + 12px);z-index:999;background:#FFF1A8;color:#3d3300;border:1px solid #e8d77a;border-radius:999px;padding:5px 14px;font:600 12.5px var(--body);box-shadow:0 6px 18px -8px rgba(0,0,0,.35);white-space:nowrap}
+
+/* Traits communs des dessins */
+.tasse-p .trait,.tasse-g .trait{fill:none;stroke:var(--blue-deep);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.tasse-p .trait.verre,.tasse-g .trait.verre{stroke-width:1.3}
+.tasse-p .reflet,.tasse-g .reflet{fill:none;stroke:#fff;stroke-opacity:.75;stroke-width:1.4;stroke-linecap:round}
+
+/* 1. Petites tasses dans la carte */
+.card .name .mini{display:inline-flex;width:22px;height:26px;margin:-4px 2px -4px -2px;flex:none}
+.card .name .mini svg{width:100%;height:100%;overflow:visible;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.card li:hover .mini svg{transform:translateY(-2px) rotate(-6deg)}
+.tasse-p .trait{stroke-width:2}
+.tasse-p .trait.verre{stroke-width:1.7}
+
+/* 2. Guide « Dans votre tasse » */
+.guide{margin:12px 0 0;padding:28px 28px 22px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.guide-top{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.guide h3{font-family:var(--display);font-weight:600;color:var(--blue-deep);font-size:30px;line-height:1.1;margin:0}
+.guide-sub{margin:6px 0 0;color:var(--stone);font-size:15px;max-width:46ch}
+.onglets{display:inline-flex;padding:4px;border-radius:999px;background:color-mix(in srgb,var(--blue) 10%,transparent)}
+.onglets button{appearance:none;border:0;background:none;font:600 14px var(--body);color:var(--blue-deep);padding:8px 18px;border-radius:999px;cursor:pointer;min-height:40px}
+.onglets button[aria-selected="true"]{background:var(--blue-deep);color:#fff}
+.rangee{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:14px}
+.carte-tasse{display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 8px 12px;border-radius:16px;background:var(--paper);opacity:0;transform:translateY(14px);transition:opacity .6s ease var(--d),transform .6s cubic-bezier(.2,.8,.2,1) var(--d)}
+.guide.vu .carte-tasse{opacity:1;transform:none}
+.carte-tasse svg{width:110px;height:132px;overflow:visible}
+.carte-tasse .ly{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.guide.vu .carte-tasse .ly{transform:scaleY(1)}
+.carte-tasse b{font-family:var(--display);color:var(--blue-deep);font-size:16.5px;line-height:1.2;margin-top:10px}
+.carte-tasse .px{font-size:13px;color:var(--stone);font-variant-numeric:tabular-nums}
+.couches{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:3px;font-size:12.5px;color:var(--ink);text-align:left}
+.couches li{display:flex;align-items:center;gap:7px;line-height:1.25}
+.couches i{width:10px;height:10px;border-radius:3px;flex:none;box-shadow:inset 0 0 0 1px rgba(39,78,114,.25)}
+.couches i.ice{background:#fff;box-shadow:inset 0 0 0 1px rgba(39,78,114,.35)}
+.echelle{display:flex;align-items:center;gap:12px;margin:16px 4px 0;font-size:12.5px;color:var(--stone)}
+.echelle i{flex:1;height:6px;border-radius:6px;background:linear-gradient(90deg,#4A2A1A,#B97C45 45%,#EFE2CB)}
+.guide-note{margin:12px 0 0;font-size:12px;color:var(--stone)}
+
+/* Animation des couches, décalée pour chaque tasse */
+.carte-tasse .ly:nth-of-type(1){transition-delay:calc(var(--d) + .15s)}
+.carte-tasse .ly:nth-of-type(2){transition-delay:calc(var(--d) + .35s)}
+.carte-tasse .ly:nth-of-type(3){transition-delay:calc(var(--d) + .55s)}
+.carte-tasse .ly:nth-of-type(4){transition-delay:calc(var(--d) + .75s)}
+
+@media (max-width:900px){
+  .rangee{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:150px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;margin-inline:-28px;padding-inline:28px;scroll-padding-inline:28px}
+  .carte-tasse{scroll-snap-align:start}
+}
+@media (max-width:700px){
+  .guide{order:3;margin-top:28px;padding:22px 18px 18px;border-radius:18px}
+  .guide h3{font-size:26px}
+  .rangee{margin-inline:-18px;padding-inline:18px;scroll-padding-inline:18px;grid-auto-columns:140px}
+}
+@media (prefers-reduced-motion:reduce){
+  .carte-tasse,.carte-tasse .ly{transition:none;opacity:1;transform:none}
+}
