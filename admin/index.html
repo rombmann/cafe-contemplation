@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#274E72">
+<title>Admin · Café Contemplation</title>
+<link rel="icon" href="../visuels/icone-192.png">
+<link rel="apple-touch-icon" href="../visuels/icone-180.png">
+<style>
+@font-face{font-family:"Fraunces";font-weight:400 700;font-display:swap;src:url("../fonts/fraunces-latin.woff2") format("woff2")}
+@font-face{font-family:"Figtree";font-weight:400 600;font-display:swap;src:url("../fonts/figtree-latin.woff2") format("woff2")}
+:root{--blue:#4F82AD;--deep:#274E72;--ink:#1F2B36;--stone:#5f5d58;--line:#dde4eb;--paper:#FBF8F1;--red:#a33b2b;--green:#2d6a3e}
+*{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%}
+body{margin:0;font:16px/1.45 "Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);padding-bottom:110px}
+h1,h2{font-family:"Fraunces",Georgia,serif;color:var(--deep);font-weight:600}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+/* En-tête et onglets */
+header{background:var(--deep);color:#fff;padding:14px 0 0;position:sticky;top:0;z-index:5}
+header .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+header h1{color:#fff;font-size:20px;margin:0}
+header h1 small{display:block;font:400 12px "Figtree",sans-serif;color:#c9d8e6;letter-spacing:.06em;text-transform:uppercase}
+header .links{display:flex;gap:6px}
+header .links a,header .links button{white-space:nowrap;color:#fff;background:none;border:1px solid rgba(255,255,255,.45);border-radius:20px;padding:6px 12px;font-size:14px;text-decoration:none;cursor:pointer}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;margin-top:12px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:0 0 auto;background:none;border:0;color:#c9d8e6;padding:10px 12px 12px;font-weight:600;font-size:15px;border-bottom:3px solid transparent;cursor:pointer}
+nav.tabs button[aria-selected=true]{color:#fff;border-bottom-color:#fff}
+
+section.panel{padding:18px 0 8px}
+section.panel>h2{font-size:24px;margin:4px 0 4px}
+.hint{color:var(--stone);font-size:14.5px;margin:0 0 14px}
+
+/* Cartes et champs */
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.card.off{opacity:.6}
+label.f{display:block;font-size:13.5px;font-weight:600;color:var(--stone);margin:0 0 4px}
+input[type=text],input[type=time],input[type=date],input[type=month],input[type=number],input:not([type]),textarea{width:100%;border:1.5px solid #cdd6df;border-radius:10px;padding:10px 12px;background:#fff;min-height:46px}
+textarea{min-height:70px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,130,173,.2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.stack>*+*{margin-top:10px}
+.checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chk{display:inline-flex;align-items:center;gap:7px;border:1.5px solid #cdd6df;border-radius:22px;padding:7px 12px;font-size:14.5px;cursor:pointer;user-select:none;background:#fff}
+.chk input{width:18px;height:18px;accent-color:var(--deep);margin:0}
+.chk:has(input:checked){border-color:var(--deep);background:#eef4f9}
+details.more{margin-top:10px}
+details.more summary{cursor:pointer;color:var(--deep);font-weight:600;font-size:14.5px;padding:4px 0}
+details.more .stack{margin-top:8px}
+.tools{display:flex;gap:6px;margin-top:12px;justify-content:flex-end}
+.tools button{border:1.5px solid #cdd6df;background:#fff;border-radius:10px;min-width:44px;min-height:40px;padding:0 10px;cursor:pointer;font-size:15px}
+.tools button.del{color:var(--red);border-color:#e3c3bd}
+.add{display:block;width:100%;border:2px dashed #b9c8d6;background:none;color:var(--deep);font-weight:600;border-radius:14px;padding:14px;cursor:pointer;margin:12px 0}
+.cat{margin:22px 0 6px}
+.cat>.cathead{background:#eef4f9;border-color:#d4e2ee}
+
+/* Horaires */
+.day{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
+.day b{font-size:16px}
+.day .times{grid-column:1/-1;display:flex;align-items:center;gap:8px}
+.day .times input{min-width:0;flex:1}
+.day .closed{grid-column:1/-1;color:var(--stone);font-style:italic;font-size:14.5px;margin-top:-4px}
+.switch{position:relative;width:52px;height:30px;flex:0 0 52px}
+.switch input{opacity:0;width:100%;height:100%;margin:0;position:absolute;inset:0;cursor:pointer;z-index:1}
+.switch span{position:absolute;inset:0;background:#c9d1d9;border-radius:20px;transition:.2s}
+.switch span::after{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch input:checked+span{background:var(--green)}
+.switch input:checked+span::after{transform:translateX(22px)}
+.switch input:focus-visible+span{box-shadow:0 0 0 3px rgba(79,130,173,.4)}
+
+/* Barre d'enregistrement */
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 0 calc(12px + env(safe-area-inset-bottom));z-index:6;box-shadow:0 -8px 24px -18px rgba(0,0,0,.4)}
+.bar .wrap{display:flex;align-items:center;gap:12px}
+.bar p{flex:1;margin:0;font-size:14.5px;color:var(--stone)}
+.bar p.err{color:var(--red);font-weight:600}
+.bar p.ok{color:var(--green);font-weight:600}
+.btn{border:0;background:var(--deep);color:#fff;font-weight:600;border-radius:12px;padding:13px 20px;cursor:pointer;font-size:16px;min-height:48px}
+.btn:disabled{background:#9fb3c6;cursor:default}
+
+/* Connexion */
+.login{max-width:400px;margin:12vh auto 0;padding:0 20px;text-align:center}
+.login h1{font-size:30px;margin:0}
+.login p{color:var(--stone)}
+.login form{margin-top:22px;text-align:left}
+.login .btn{width:100%;margin-top:12px}
+.login .err{color:var(--red);font-weight:600;margin-top:10px;min-height:1.4em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:420px){.grid2{grid-template-columns:1fr}header h1{font-size:18px}}
+</style>
+</head>
+<body>
+
+<!-- ============ CONNEXION ============ -->
+<main id="vue-connexion" class="login" hidden>
+  <h1>Café Contemplation</h1>
+  <p>Espace d'administration du site</p>
+  <form id="form-connexion">
+    <label class="f" for="mdp">Mot de passe</label>
+    <input id="mdp" type="password" autocomplete="current-password" required>
+    <button class="btn" type="submit">Se connecter</button>
+    <p class="err" id="err-connexion" role="alert"></p>
+  </form>
+</main>
+
+<!-- ============ MESSAGE (configuration, hébergement) ============ -->
+<main id="vue-message" class="login" hidden>
+  <h1>Café Contemplation</h1>
+  <p id="texte-message"></p>
+</main>
+
+<!-- ============ ÉDITION ============ -->
+<div id="vue-edition" hidden>
+  <header>
+    <div class="wrap">
+      <div class="row">
+        <h1><small>Admin</small>Café Contemplation</h1>
+        <div class="links"><a href="../" target="_blank" rel="noopener">Voir le site</a><button type="button" id="deconnexion">Sortir</button></div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Parties du site">
+        <button role="tab" data-tab="horaires" aria-selected="true">Horaires</button>
+        <button role="tab" data-tab="fermetures">Fermetures</button>
+        <button role="tab" data-tab="carte">Carte</button>
+        <button role="tab" data-tab="douceurs">Douceurs</button>
+        <button role="tab" data-tab="google">Avis Google</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="panel" id="p-horaires" role="tabpanel">
+      <h2>Horaires de la semaine</h2>
+      <p class="hint">Le statut « Ouvert / Fermé » du site se calcule tout seul à partir de ces horaires.</p>
+      <div id="horaires"></div>
+    </section>
+
+    <section class="panel" id="p-fermetures" role="tabpanel" hidden>
+      <h2>Fermetures exceptionnelles</h2>
+      <p class="hint">Vacances, jours fériés… Un bandeau prévient les visiteurs à l'avance, et le site indique la date de réouverture. Pour un seul jour, laissez « Jusqu'au » vide.</p>
+      <div id="fermetures"></div>
+      <button class="add" type="button" id="ajout-fermeture">+ Ajouter une fermeture</button>
+      <div class="card">
+        <label class="f" for="annonce">Annoncer une fermeture combien de jours avant ?</label>
+        <input id="annonce" type="number" min="0" max="90" inputmode="numeric">
+      </div>
+    </section>
+
+    <section class="panel" id="p-carte" role="tabpanel" hidden>
+      <h2>La carte</h2>
+      <p class="hint">Changez un prix, ajoutez une boisson, ou décochez « Disponible » pour la cacher sans la supprimer.</p>
+      <div id="carte"></div>
+    </section>
+
+    <section class="panel" id="p-douceurs" role="tabpanel" hidden>
+      <h2>Douceurs</h2>
+      <p class="hint">Le prix est facultatif. Décochez « Disponible » pour cacher une douceur pendant un temps.</p>
+      <div id="douceurs"></div>
+      <button class="add" type="button" id="ajout-douceur">+ Ajouter une douceur</button>
+    </section>
+
+    <section class="panel" id="p-google" role="tabpanel" hidden>
+      <h2>Avis Google</h2>
+      <p class="hint">Recopiez de temps en temps la note et le nombre d'avis affichés sur votre fiche Google.</p>
+      <div class="card stack">
+        <div class="grid2">
+          <div><label class="f" for="g-note">Note (sur 5)</label><input id="g-note" type="text" inputmode="decimal"></div>
+          <div><label class="f" for="g-avis">Nombre d'avis</label><input id="g-avis" type="number" min="0" inputmode="numeric"></div>
+        </div>
+        <div><label class="f" for="g-mois">Mois du relevé</label><input id="g-mois" type="month"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="bar">
+    <div class="wrap">
+      <p id="etat" role="status" aria-live="polite">Aucune modification.</p>
+      <button class="btn" type="button" id="enregistrer" disabled>Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var data = null, sha = null, modifie = false, enCours = false;
+var JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+var $ = function(id){ return document.getElementById(id); };
+
+/* Petit constructeur d'éléments (tout le texte passe par textContent) */
+function h(tag, attrs, enfants){
+  var e = document.createElement(tag);
+  if (attrs) Object.keys(attrs).forEach(function(k){
+    var v = attrs[k];
+    if (v === undefined || v === null || v === false) return;
+    if (k === "text") e.textContent = v;
+    else if (k.slice(0,2) === "on") e.addEventListener(k.slice(2), v);
+    else if (k === "value") e.value = v;
+    else if (k === "checked") e.checked = !!v;
+    else e.setAttribute(k, v === true ? "" : v);
+  });
+  (enfants || []).forEach(function(c){ if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+  return e;
+}
+var uid = 0;
+function champ(label, input){ input.id = input.id || ("c" + (++uid)); return h("div", null, [h("label", { "class": "f", "for": input.id, text: label }), input]); }
+function texte(obj, cle, label, opts){
+  opts = opts || {};
+  var tag = opts.multi ? "textarea" : "input";
+  var v0 = obj[cle] == null ? "" : (opts.prix && typeof obj[cle] === "number" ? obj[cle].toFixed(2) : String(obj[cle]));
+  var i = h(tag, { type: opts.multi ? null : "text", value: v0, inputmode: opts.inputmode, placeholder: opts.placeholder,
+    oninput: function(){ obj[cle] = opts.prix ? i.value : (i.value.trim() ? i.value : undefined); if (!opts.prix && !i.value.trim()) delete obj[cle]; changer(); } });
+  return champ(label, i);
+}
+function case_(label, get, set){
+  var i = h("input", { type: "checkbox", checked: get(), onchange: function(){ set(i.checked); changer(); } });
+  return h("label", { "class": "chk" }, [i, label]);
+}
+
+/* ---------- État « modifié » et barre du bas ---------- */
+function etat(msg, cls){ var p = $("etat"); p.textContent = msg; p.className = cls || ""; }
+function changer(){
+  modifie = true;
+  $("enregistrer").disabled = false;
+  etat("Modifications non enregistrées.");
+}
+window.addEventListener("beforeunload", function(e){ if (modifie){ e.preventDefault(); e.returnValue = ""; } });
+
+/* ---------- Appels au serveur ---------- */
+function api(chemin, options){
+  options = options || {};
+  options.credentials = "same-origin";
+  options.headers = { "content-type": "application/json" };
+  return fetch("/api/" + chemin, options).then(function(r){
+    var type = r.headers.get("content-type") || "";
+    if (type.indexOf("application/json") < 0) return { statut: r.status, json: { erreur: r.status === 404 ? "absent" : "Réponse inattendue du serveur." } };
+    return r.json().then(function(j){ return { statut: r.status, json: j }; });
+  }, function(){ return { statut: 0, json: { erreur: "Pas de connexion internet ?" } }; });
+}
+
+function montrer(vue){ ["vue-connexion","vue-message","vue-edition"].forEach(function(v){ $(v).hidden = v !== vue; }); }
+function message(t){ $("texte-message").textContent = t; montrer("vue-message"); }
+
+function charger(){
+  return api("donnees").then(function(r){
+    if (r.statut === 200){ data = r.json.donnees; sha = r.json.sha; modifie = false; tout(); montrer("vue-edition"); etat("Aucune modification."); $("enregistrer").disabled = true; return; }
+    if (r.statut === 401){ montrer("vue-connexion"); $("mdp").focus(); return; }
+    if (r.json.erreur === "absent") return message("L'administration fonctionne sur l'adresse finale du site (hébergée chez Cloudflare), pas sur cette version de test.");
+    message(r.json.erreur || "Erreur de chargement.");
+  });
+}
+
+$("form-connexion").addEventListener("submit", function(e){
+  e.preventDefault();
+  $("err-connexion").textContent = "";
+  var b = this.querySelector("button"); b.disabled = true;
+  api("connexion", { method: "POST", body: JSON.stringify({ motDePasse: $("mdp").value }) }).then(function(r){
+    b.disabled = false;
+    if (r.statut === 200){ $("mdp").value = ""; return charger(); }
+    $("err-connexion").textContent = r.json.erreur === "absent" ? "Admin indisponible sur cette adresse." : (r.json.erreur || "Erreur.");
+  });
+});
+
+$("deconnexion").addEventListener("click", function(){
+  if (modifie && !confirm("Des modifications ne sont pas enregistrées. Sortir quand même ?")) return;
+  api("deconnexion", { method: "POST", body: "{}" }).then(function(){ modifie = false; data = null; montrer("vue-connexion"); });
+});
+
+$("enregistrer").addEventListener("click", function(){
+  if (enCours) return;
+  enCours = true; $("enregistrer").disabled = true; etat("Enregistrement…");
+  api("donnees", { method: "PUT", body: JSON.stringify({ donnees: data, sha: sha }) }).then(function(r){
+    enCours = false;
+    if (r.statut === 200){
+      modifie = false;
+      if (r.json.sha) sha = r.json.sha;
+      if (r.json.donnees){ data = r.json.donnees; tout(); }
+      etat(r.json.inchange ? "Rien n'a changé." : "C'est enregistré ! Le site sera à jour dans une minute environ.", "ok");
+      return;
+    }
+    $("enregistrer").disabled = false;
+    if (r.statut === 401){ etat("Session expirée : reconnectez-vous (vos modifications sont gardées dans cette page).", "err"); montrer("vue-connexion"); return; }
+    etat(r.json.erreur || "Erreur d'enregistrement.", "err");
+  });
+});
+
+/* ---------- Onglets ---------- */
+document.querySelectorAll("nav.tabs button").forEach(function(b){
+  b.addEventListener("click", function(){
+    document.querySelectorAll("nav.tabs button").forEach(function(x){ x.setAttribute("aria-selected", x === b); });
+    document.querySelectorAll("section.panel").forEach(function(p){ p.hidden = p.id !== "p-" + b.dataset.tab; });
+    window.scrollTo(0, 0);
+  });
+});
+
+/* ---------- Horaires ---------- */
+function rendreHoraires(){
+  var root = $("horaires"); root.textContent = "";
+  data.hours.forEach(function(j, i){
+    var ouvert = !j.closed;
+    var sw = h("input", { type: "checkbox", checked: ouvert, "aria-label": JOURS[i] + " ouvert",
+      onchange: function(){
+        if (sw.checked){ delete j.closed; j.open = j.open || "08:00"; j.close = j.close || "17:00"; }
+        else { j.closed = true; delete j.open; delete j.close; }
+        changer(); rendreHoraires();
+      } });
+    var droite = ouvert
+      ? h("div", { "class": "times" }, [
+          h("input", { type: "time", value: j.open, "aria-label": JOURS[i] + ", ouverture", oninput: function(){ j.open = this.value; changer(); } }),
+          h("span", { text: "–" }),
+          h("input", { type: "time", value: j.close, "aria-label": JOURS[i] + ", fermeture", oninput: function(){ j.close = this.value; changer(); } })
+        ])
+      : h("span", { "class": "closed", text: "Fermé" });
+    root.appendChild(h("div", { "class": "day" }, [h("b", { text: JOURS[i] }), h("label", { "class": "switch" }, [sw, h("span")]), droite]));
+  });
+}
+
+/* ---------- Fermetures ---------- */
+function rendreFermetures(){
+  var root = $("fermetures"); root.textContent = "";
+  if (!data.fermetures.length) root.appendChild(h("p", { "class": "hint", text: "Aucune fermeture prévue." }));
+  data.fermetures.forEach(function(f, i){
+    root.appendChild(h("div", { "class": "card stack" }, [
+      h("div", { "class": "grid2" }, [
+        champ("Du", h("input", { type: "date", value: f.du, oninput: function(){ f.du = this.value; changer(); } })),
+        champ("Jusqu'au (inclus)", h("input", { type: "date", value: f.au || "", oninput: function(){ if (this.value) f.au = this.value; else delete f.au; changer(); } }))
+      ]),
+      texte(f, "motif", "Motif (ex. Vacances d'été)"),
+      h("details", { "class": "more" }, [h("summary", { text: "En anglais" }), h("div", { "class": "stack" }, [texte(f, "motif_en", "Motif en anglais (ex. Summer holidays)")])]),
+      h("div", { "class": "tools" }, [h("button", { type: "button", "class": "del", text: "Supprimer", onclick: function(){ data.fermetures.splice(i, 1); changer(); rendreFermetures(); } })])
+    ]));
+  });
+  $("annonce").value = data.fermetureAnnonceJours;
+}
+$("ajout-fermeture").addEventListener("click", function(){
+  var d = new Date(); d.setDate(d.getDate() + 7);
+  data.fermetures.push({ du: d.toISOString().slice(0, 10) });
+  changer(); rendreFermetures();
+});
+$("annonce").addEventListener("input", function(){ data.fermetureAnnonceJours = this.value === "" ? 0 : Number(this.value); changer(); });
+
+/* ---------- Carte et douceurs : boutons communs ---------- */
+function outils(liste, i, rendre){
+  return h("div", { "class": "tools" }, [
+    h("button", { type: "button", "aria-label": "Monter", text: "↑", disabled: i === 0, onclick: function(){ var x = liste.splice(i, 1)[0]; liste.splice(i - 1, 0, x); changer(); rendre(); } }),
+    h("button", { type: "button", "aria-label": "Descendre", text: "↓", disabled: i === liste.length - 1, onclick: function(){ var x = liste.splice(i, 1)[0]; liste.splice(i + 1, 0, x); changer(); rendre(); } }),
+    h("button", { type: "button", "class": "del", text: "Supprimer", onclick: function(){ if (confirm("Supprimer « " + (liste[i].name || "ce produit") + " » ?")){ liste.splice(i, 1); changer(); rendre(); } } })
+  ]);
+}
+function temp(p, t){
+  return case_(t === "chaud" ? "Chaud" : "Glacé", function(){ return (p.temps || []).indexOf(t) >= 0; }, function(v){
+    var l = (p.temps || []).filter(function(x){ return x !== t; });
+    if (v) l.push(t);
+    l.sort(function(a){ return a === "chaud" ? -1 : 1; });
+    if (l.length) p.temps = l; else delete p.temps;
+  });
+}
+
+function rendreCarte(){
+  var root = $("carte"); root.textContent = "";
+  data.menu.forEach(function(cat){
+    var bloc = h("div", { "class": "cat" });
+    bloc.appendChild(h("div", { "class": "card stack cathead" }, [
+      texte(cat, "title", "Nom de la catégorie"),
+      h("details", { "class": "more" }, [h("summary", { text: "En anglais" }), h("div", { "class": "stack" }, [texte(cat, "title_en", "Nom en anglais (si différent)")])])
+    ]));
+    cat.items.forEach(function(p, i){
+      var dispo = p.available !== false;
+      bloc.appendChild(h("div", { "class": "card" + (dispo ? "" : " off") }, [
+        h("div", { "class": "grid3" }, [texte(p, "name", "Nom"), texte(p, "price", "Prix (CHF)", { inputmode: "decimal", prix: true })]),
+        h("div", { "class": "checks" }, [
+          temp(p, "chaud"), temp(p, "glacé"),
+          case_("♥ Coup de cœur", function(){ return !!p.fav; }, function(v){ if (v) p.fav = true; else delete p.fav; }),
+          case_("Disponible", function(){ return p.available !== false; }, function(v){ if (v) delete p.available; else p.available = false; rendreCarte(); })
+        ]),
+        h("details", { "class": "more" }, [h("summary", { text: "Description, anglais, mise en page" }), h("div", { "class": "stack" }, [
+          texte(p, "desc", "Petite description (facultatif)"),
+          texte(p, "name_en", "Nom en anglais (si différent)"),
+          texte(p, "desc_en", "Description en anglais"),
+          h("div", { "class": "checks" }, [case_("Petit espace avant cette ligne", function(){ return !!p.gap; }, function(v){ if (v) p.gap = true; else delete p.gap; })])
+        ])]),
+        outils(cat.items, i, rendreCarte)
+      ]));
+    });
+    bloc.appendChild(h("button", { "class": "add", type: "button", text: "+ Ajouter dans « " + cat.title + " »", onclick: function(){
+      cat.items.push({ name: "", price: "" }); changer(); rendreCarte();
+      setTimeout(function(){ var c = $("carte").querySelectorAll(".cat")[data.menu.indexOf(cat)].querySelectorAll(".card"); var last = c[c.length - 1]; last.scrollIntoView({ block: "center" }); last.querySelector("input").focus(); }, 30);
+    } }));
+    root.appendChild(bloc);
+  });
+}
+
+function rendreDouceurs(){
+  var root = $("douceurs"); root.textContent = "";
+  data.douceurs.forEach(function(p, i){
+    var dispo = p.available !== false;
+    root.appendChild(h("div", { "class": "card" + (dispo ? "" : " off") }, [
+      h("div", { "class": "grid3" }, [texte(p, "name", "Nom"), texte(p, "price", "Prix (CHF, facultatif)", { inputmode: "decimal", prix: true })]),
+      h("div", { "class": "stack", style: "margin-top:10px" }, [texte(p, "desc", "Description", { multi: true })]),
+      h("div", { "class": "checks" }, [
+        case_("Disponible", function(){ return p.available !== false; }, function(v){ if (v) delete p.available; else p.available = false; rendreDouceurs(); }),
+        case_("Prix « à confirmer »", function(){ return !!p.confirm; }, function(v){ if (v) p.confirm = true; else delete p.confirm; })
+      ]),
+      h("details", { "class": "more" }, [h("summary", { text: "En anglais" }), h("div", { "class": "stack" }, [
+        texte(p, "name_en", "Nom en anglais (si différent)"),
+        texte(p, "desc_en", "Description en anglais", { multi: true })
+      ])]),
+      outils(data.douceurs, i, rendreDouceurs)
+    ]));
+  });
+}
+$("ajout-douceur").addEventListener("click", function(){
+  data.douceurs.push({ name: "" }); changer(); rendreDouceurs();
+  var c = $("douceurs").querySelectorAll(".card"); var last = c[c.length - 1]; last.scrollIntoView({ block: "center" }); last.querySelector("input").focus();
+});
+
+/* ---------- Avis Google ---------- */
+function rendreGoogle(){
+  $("g-note").value = String(data.google.ratingValue).replace(".", ",");
+  $("g-avis").value = data.google.reviewCount;
+  $("g-mois").value = data.google.checkedOn;
+}
+$("g-note").addEventListener("input", function(){ data.google.ratingValue = Number(this.value.replace(",", ".")); changer(); });
+$("g-avis").addEventListener("input", function(){ data.google.reviewCount = Number(this.value); changer(); });
+$("g-mois").addEventListener("input", function(){ data.google.checkedOn = this.value; changer(); });
+
+function tout(){ rendreHoraires(); rendreFermetures(); rendreCarte(); rendreDouceurs(); rendreGoogle(); }
+
+charger();
+})();
+</script>
+</body>
+</html>

@@ -633,13 +633,15 @@ footer .brand{align-items:flex-start}
   <a data-href="tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.500 3.500h3l1.500 4-2 1.500a12 12 0 0 0 6 6l1.500-2 4 1.500v3a2 2 0 0 1-2.200 2A17 17 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z"/></svg><span data-i18n="dockCall">Appeler</span></a>
 </div>
 
+<script src="donnees.js"></script>
 <script>
 /* =====================================================================
    MODIFIER LES DONNÉES DU SITE ICI
-   Tout ce qui change dans la vie du café se trouve dans SITE_DATA :
-   horaires, contact, liens, note Google, carte, prix, douceurs.
-   La page se construit à partir de ces données : un prix ou un produit
-   ne se modifie qu'ici, à un seul endroit.
+   Tout ce qui change dans la vie du café se trouve dans SITE_DATA (contact,
+   liens, notes) et dans le fichier donnees.js (horaires, fermetures, note
+   Google, carte, prix, douceurs), que le café modifie lui-même depuis
+   l'admin (/admin). La page se construit à partir de ces données : un prix
+   ou un produit ne se modifie qu'à un seul endroit.
    (Les textes d'accueil et l'histoire du café sont dans le HTML plus haut,
    repérés par les commentaires « TEXTE ».)
 
@@ -652,27 +654,19 @@ footer .brand{align-items:flex-start}
 const SITE_DATA = {
   name: "Café Contemplation",
 
-  /* --- Horaires. open/close au format "HH:MM", ou closed: true. À CONFIRMER avec le propriétaire. --- */
+  /* --- Horaires, fermetures exceptionnelles, note Google, carte et douceurs : dans donnees.js
+         (modifiables depuis l'admin, adresse du site + /admin). Format des champs :
+         hours        7 jours, du lundi au dimanche : { day, open: "HH:MM", close: "HH:MM" } ou { day, closed: true }
+         fermetures   [{ du: "AAAA-MM-JJ", au: "AAAA-MM-JJ" (facultatif, inclus), motif, motif_en }]
+                      Un bandeau les annonce en haut du site fermetureAnnonceJours jours avant, et le statut
+                      « Ouvert / Fermé » indique la date de réouverture.
+         google       { ratingValue, reviewCount, checkedOn: "AAAA-MM" } (saisie à la main, pas de synchronisation)
+         menu         catégories { id, title, title_en, after, items } ; produits :
+                        name / name_en, price (CHF), temps ["chaud","glacé"], fav (coup de cœur),
+                        desc / desc_en, gap (espace avant), available: false (masqué)
+         douceurs     { name / name_en, desc / desc_en, price (facultatif), confirm (« à confirmer »), available } --- */
   timezone: "Europe/Zurich",
   closingSoonMinutes: 30,           // « Ferme bientôt » s'affiche dans la dernière demi-heure
-  hours: [
-    { day: "Lundi",    closed: true },
-    { day: "Mardi",    closed: true },
-    { day: "Mercredi", open: "07:30", close: "16:00" },
-    { day: "Jeudi",    open: "07:30", close: "16:00" },
-    { day: "Vendredi", open: "07:30", close: "16:00" },
-    { day: "Samedi",   open: "09:00", close: "17:00" },
-    { day: "Dimanche", open: "09:00", close: "17:00" }
-  ],
-
-  /* --- Fermetures exceptionnelles (vacances, jours fériés…). Dates au format "AAAA-MM-JJ", « au » inclus ;
-         pour un seul jour, « au » peut être omis. Exemples :
-           { du: "2026-12-24", au: "2027-01-02", motif: "Vacances de fin d'année", motif_en: "Christmas holidays" },
-           { du: "2027-04-02", motif: "Vendredi saint", motif_en: "Good Friday" }
-         Un bandeau l'annonce en haut du site et dans les horaires quelques jours avant (réglage ci-dessous),
-         et le statut « Ouvert / Fermé » indique la date de réouverture. Retirer les fermetures passées de temps en temps. --- */
-  fermetures: [],
-  fermetureAnnonceJours: 14,
 
   /* --- Adresse et contact --- */
   contact: {
@@ -696,10 +690,6 @@ const SITE_DATA = {
     directions: "https://www.google.com/maps/dir/?api=1&destination=Caf%C3%A9+Contemplation%2C+Avenue+d%27Ouchy+76%2C+1006+Lausanne"
   },
 
-  /* --- Note Google : saisie à la main, à mettre à jour de temps en temps (pas de synchronisation automatique).
-         checkedOn = mois du relevé, au format "AAAA-MM" (affiché « novembre 2026 » / « November 2026 »). --- */
-  google: { ratingValue: 5.0, reviewCount: 188, checkedOn: "2026-11" },
-
   /* --- Citations de clients : laisser vide tant qu'aucune n'est validée. Exemple : { text: "…", author: "Prénom N." } --- */
   testimonials: [],
 
@@ -714,81 +704,10 @@ const SITE_DATA = {
     allergy: "Allergies or intolerances? Please let the team know before you order.",
     takeaway: "Eat in or take away.",
     sweets: "The display changes with the day and the season: not everything is available every day."
-  },
-
-  /* --- La carte. Pour chaque produit :
-         name   nom affiché                       (name_en : nom en anglais, si différent)
-         price  prix en CHF (nombre)
-         temps  ["chaud"], ["glacé"] ou ["chaud","glacé"] (facultatif ; « hot / iced » en anglais)
-         fav    true = coup de cœur (facultatif)
-         desc   petite description (facultatif)  (desc_en : en anglais)
-         gap    true = petit espace avant la ligne (facultatif)
-         available: false = masque le produit sans le supprimer (facultatif)
-         Une catégorie peut aussi avoir title_en. --- */
-  menu: [
-    {
-      id: "coffee", title: "Specialty coffee",
-      items: [
-        { name: "Double espresso",    price: 4.90 },
-        { name: "Americano",          price: 5.50, temps: ["chaud", "glacé"] },
-        { name: "Batch brew",         price: 5.50, temps: ["chaud", "glacé"], fav: true },
-        { name: "Espresso macchiato", price: 4.90, gap: true },
-        { name: "Cortado",            price: 5.50 },
-        { name: "Cappuccino",         price: 6.00 },
-        { name: "Flat white",         price: 6.50, fav: true },
-        { name: "Mocha",              price: 6.90, temps: ["chaud", "glacé"] },
-        { name: "Latte",              price: 6.90, temps: ["chaud", "glacé"] },
-        { name: "Espresso Tonic",     price: 7.00, fav: true, gap: true },
-        { name: "Espresso Sunrise",   price: 7.50 }
-      ]
-    },
-    {
-      id: "matcha", title: "Matcha lovers",
-      items: [
-        { name: "Matcha latte",   price: 7.00, temps: ["chaud", "glacé"] },
-        { name: "Matcha Vanille", name_en: "Vanilla matcha",    price: 7.20, temps: ["chaud", "glacé"], fav: true },
-        { name: "Matcha Lavande", name_en: "Lavender matcha",   price: 7.20, temps: ["chaud", "glacé"] },
-        { name: "Matcha Rose",    name_en: "Rose matcha",       price: 7.20, temps: ["chaud", "glacé"] },
-        { name: "Matcha Fraise",  name_en: "Strawberry matcha", price: 7.50, temps: ["chaud", "glacé"] }
-      ]
-    },
-    {
-      id: "supplements", title: "Suppléments", title_en: "Extras", after: "matcha",   // affiché sous « Matcha lovers »
-      items: [
-        { name: "Lait alternatif", name_en: "Plant-based milk", price: 0.50, desc: "Avoine, amande, coco, pois, sans lactose", desc_en: "Oat, almond, coconut, pea, lactose-free" },
-        { name: "Sirop",           name_en: "Syrup",            price: 0.50 },
-        { name: "Extra shot",      price: 1.50 }
-      ]
-    },
-    {
-      id: "tea", title: "Chocolate & Tea",
-      items: [
-        { name: "Chai latte",     price: 6.50, temps: ["chaud", "glacé"], fav: true },
-        { name: "Chocolat chaud", name_en: "Hot chocolate", price: 6.50, temps: ["chaud", "glacé"] },
-        { name: "Hojicha latte",  price: 6.50, temps: ["chaud", "glacé"] },
-        { name: "Thé chaud",      name_en: "Tea", price: 4.50, desc: "Sencha, Jasmin, Earl Grey, Irish Breakfast, Thé fumé, Infusion", desc_en: "Sencha, jasmine, Earl Grey, Irish Breakfast, smoked tea, herbal infusion" },
-        { name: "Make it dirty",  price: 1.50, gap: true }
-      ]
-    }
-  ],
-
-  /* --- Douceurs maison.
-         price    prix en CHF (facultatif)
-         confirm  true = affiche « à confirmer » à côté du prix : à retirer une fois validé par le propriétaire
-         name_en / desc_en : en anglais (facultatif)
-         Prix relevés sur les étiquettes de la vitrine (vidéo Instagram de mai 2026). --- */
-  douceurs: [
-    { name: "Cookie de la nonna",    name_en: "Nonna's cookie",
-      desc: "Chocolat, noisette. La recette de la grand-mère de Lloyd.", desc_en: "Chocolate and hazelnut. Lloyd's grandmother's recipe.", price: 5.00, confirm: true },
-    { name: "Cookie matcha",         name_en: "Matcha cookie",
-      desc: "Chocolat blanc.", desc_en: "White chocolate.", price: 5.00, confirm: true },
-    { name: "Kola-Czech",
-      desc: "Le koláč de la grand-maman tchèque d'Adéla, garni selon la saison.", desc_en: "The koláč of Adéla's Czech grandmother, with a seasonal filling.", price: 7.50, confirm: true },
-    { name: "Brownie",               desc: "Fait maison.", desc_en: "Homemade." },
-    { name: "Cake citron & romarin", name_en: "Lemon & rosemary cake", desc: "Fait maison.", desc_en: "Homemade." },
-    { name: "Viennoiseries",         name_en: "Croissants & pastries", desc: "Livrées par une boulangerie de Pully.", desc_en: "Delivered by a bakery in Pully." }
-  ]
+  }
 };
+/* Données modifiables depuis l'admin (fichier donnees.js, chargé juste avant ce script) */
+Object.assign(SITE_DATA, window.DONNEES);
 /* ===================== FIN DES DONNÉES ===================== */
 
 

@@ -1,0 +1,4 @@
+# Secrets et fichiers de test locaux (wrangler)
+.dev.vars
+.wrangler/
+node_modules/
