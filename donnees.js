@@ -248,7 +248,7 @@ window.DONNEES = {
       "name_en": "Nonna's cookie",
       "desc": "Chocolat, noisette. La recette de la grand-mère de Lloyd.",
       "desc_en": "Chocolate and hazelnut. Lloyd's grandmother's recipe.",
-      "price": 5,
+      "price": 4.5,
       "confirm": true
     },
     {
