@@ -1,0 +1,11 @@
+# Cache du navigateur (lu par Cloudflare, ignoré par GitHub Pages).
+# Polices et Three.js ne changent jamais : gardés 30 jours. Photos et vidéos : 1 jour, puis vérifiées en arrière-plan.
+# index.html et donnees.js ne sont pas listés : toujours vérifiés, pour que les changements de l'admin se voient tout de suite.
+/fonts/*
+  Cache-Control: public, max-age=2592000
+/vendor/*
+  Cache-Control: public, max-age=2592000
+/visuels/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/video/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

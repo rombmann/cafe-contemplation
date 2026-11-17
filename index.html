@@ -187,6 +187,7 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);lin
 .legend li{display:inline-flex;align-items:center;gap:7px}
 .heart{color:var(--rose);font-size:14px;line-height:1}
 .tag{display:inline-block;font:500 11.5px var(--body);letter-spacing:.02em;padding:1px 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--blue) 45%,transparent);color:var(--blue-deep);white-space:nowrap}
+.tags{display:inline-flex;gap:4px;white-space:nowrap}
 .tag.cold{background:color-mix(in srgb,var(--blue) 14%,transparent)}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 44px;margin-top:30px;align-items:start}
 .card h3{font-family:var(--script);font-weight:400;color:var(--blue);font-size:34px;margin:0;line-height:1.1}
@@ -285,6 +286,7 @@ tr.today th::before{content:"→ ";}
 .map-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
 .map::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,24,33,.35),rgba(15,24,33,.72));pointer-events:none}
 .map-cover{position:relative;z-index:1;height:100%;display:grid;place-content:center;justify-items:center;gap:12px;padding:20px;text-align:center}
+.map-addr span{white-space:nowrap}
 .map-addr{margin:0;font-family:var(--display);font-size:clamp(20px,2.4vw,26px);font-weight:600;color:#fff}
 .map-note{margin:0;font-size:13px;color:rgba(255,255,255,.8)}
 .map iframe{position:absolute;inset:0;z-index:2;width:100%;height:100%;border:0;background:#e9e5dc}
@@ -496,7 +498,7 @@ footer .brand{align-items:flex-start}
           <h2 id="h-carte" data-i18n="menuTitle">Boissons</h2>
         </div>
         <!-- Pot à lait : le filet de lait en part. Purement décoratif. -->
-        <img class="pitcher" id="pitcher" src="visuels/pot-a-lait.webp" width="480" height="480" alt="" aria-hidden="true" decoding="async">
+        <img class="pitcher" id="pitcher" src="visuels/pot-a-lait.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy" decoding="async">
       </div>
         <ul class="legend" aria-label="Légende de la carte" data-i18n-attr="aria-label:legendLabel">
           <li><span class="heart" aria-hidden="true">♥</span> <span data-i18n="legendFav">Coup de cœur de la maison</span></li>
@@ -986,10 +988,14 @@ function renderMenu(){
     var ul = el("ul");
     items.forEach(function(i){
       var name = el("span", { "class": "name" }, [document.createTextNode(tr(i, "name"))]);
-      (i.temps || []).forEach(function(tp){
-        var iced = tp === "glacé";
-        name.appendChild(el("span", { "class": "tag" + (iced ? " cold" : ""), text: iced ? t("iced") : tp === "chaud" ? t("hot") : tp }));
-      });
+      if ((i.temps || []).length){                 // étiquettes groupées : elles passent à la ligne ensemble, jamais une seule
+        var tags = el("span", { "class": "tags" });
+        i.temps.forEach(function(tp){
+          var iced = tp === "glacé";
+          tags.appendChild(el("span", { "class": "tag" + (iced ? " cold" : ""), text: iced ? t("iced") : tp === "chaud" ? t("hot") : tp }));
+        });
+        name.appendChild(tags);
+      }
       var mark = i.fav
         ? el("span", { "class": "heart" }, [el("span", { "aria-hidden": "true", text: "♥" }), el("span", { "class": "sr", text: t("fav") })])
         : el("span", { "aria-hidden": "true" });
