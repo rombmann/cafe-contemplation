@@ -414,8 +414,8 @@ footer .brand{align-items:flex-start}
     </nav>
     <!-- Langue : français / anglais (textes anglais dans le bloc « TEXTES EN ANGLAIS » du script) -->
     <div class="lang" role="group" aria-label="Langue · Language">
-      <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="Français">FR</button>
-      <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+      <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="FR, français">FR</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="EN, English">EN</button>
     </div>
   </div>
 </header>
@@ -470,7 +470,7 @@ footer .brand{align-items:flex-start}
         </div>
       </div>
       <div class="story-media">
-        <img class="story-img" src="visuels/interieur.webp" width="1400" height="782" loading="lazy" decoding="async" alt="La salle du Café Contemplation : comptoir en terrazzo, tables bleues et banquette en chêne" data-i18n-attr="alt:altInterior">
+        <img class="story-img" src="visuels/interieur.webp" srcset="visuels/interieur-700.webp 700w, visuels/interieur.webp 1400w" sizes="(max-width: 860px) 92vw, 520px" width="1400" height="782" loading="lazy" decoding="async" alt="La salle du Café Contemplation : comptoir en terrazzo, tables bleues et banquette en chêne" data-i18n-attr="alt:altInterior">
         <!-- Tasse 3D (vidéo générée) : posée sur le coin de la photo, fait un demi-tour quand elle arrive à l'écran. Purement décorative. -->
         <div class="tasse3d" aria-hidden="true"><video id="tasse3d" muted playsinline preload="none" poster="visuels/tasse-3d.webp" tabindex="-1" disablepictureinpicture></video></div>
       </div>
@@ -521,7 +521,7 @@ footer .brand{align-items:flex-start}
       </div>
 
       <div class="sweets" id="douceurs">
-        <img src="visuels/patisseries.webp" width="1344" height="1800" loading="lazy" decoding="async" alt="Cookies et koláče maison présentés sur le comptoir en terrazzo" data-i18n-attr="alt:altSweets">
+        <img src="visuels/patisseries.webp" srcset="visuels/patisseries-700.webp 700w, visuels/patisseries.webp 1344w" sizes="(max-width: 860px) 92vw, 460px" width="1344" height="1800" loading="lazy" decoding="async" alt="Cookies et koláče maison présentés sur le comptoir en terrazzo" data-i18n-attr="alt:altSweets">
         <div>
           <p class="kicker" data-i18n="sweetsKicker">Fait maison</p>
           <h2 data-i18n="sweetsTitle">Douceurs</h2>
