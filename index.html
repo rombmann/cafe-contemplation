@@ -1329,6 +1329,41 @@ var HOURS = (function hours(){
   layout();
 })();
 
+/* ---------- Défilement doux à la molette (ordinateur) ----------
+   Chaque cran de molette fait glisser la page au lieu de la faire sauter. Les pavés tactiles, déjà fluides,
+   le clavier, la barre de défilement et les téléphones gardent le défilement normal du navigateur. */
+(function doux(){
+  if (!window.matchMedia || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  var DOUX = 120;                             // ms : plus grand = glisse plus longtemps
+  var cible = 0, actuel = 0, raf = 0, lastT = 0;
+  function fin(){ return document.documentElement.scrollHeight - window.innerHeight; }
+  function pas(now){
+    raf = 0;
+    var dt = Math.max(0, Math.min(64, now - lastT)); lastT = now;
+    actuel += (cible - actuel) * (1 - Math.exp(-dt / DOUX));
+    if (Math.abs(cible - actuel) < 0.5) actuel = cible;
+    window.scrollTo({ top: actuel, behavior: "instant" });
+    if (actuel !== cible) raf = requestAnimationFrame(pas);
+  }
+  function stop(){ if (raf){ cancelAnimationFrame(raf); raf = 0; } }
+  window.addEventListener("wheel", function(e){
+    if (e.ctrlKey || e.shiftKey || e.defaultPrevented || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;   // zoom, défilement horizontal
+    if (document.querySelector(".lightbox[open]")) return;
+    var d = e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? window.innerHeight : 1);
+    if (!raf && e.deltaMode === 0 && Math.abs(d) < 50) return;   // pavé tactile : petits pas, déjà fluides
+    if (raf && performance.now() - lastT > 250){ stop(); return; }   // images bloquées (onglet en arrière-plan…) : le navigateur reprend la main
+    e.preventDefault();
+    if (!raf){ actuel = cible = window.scrollY; lastT = performance.now(); }
+    cible = Math.max(0, Math.min(fin(), cible + d));
+    if (!raf) raf = requestAnimationFrame(pas);
+  }, { passive: false });
+  // Clavier, clic sur un lien ou sur la barre de défilement : la main revient tout de suite au navigateur
+  window.addEventListener("keydown", stop);
+  window.addEventListener("mousedown", stop);
+  window.addEventListener("touchstart", stop, { passive: true });
+})();
+
 /* ---------- Apparition douce des blocs (hors carte, dont le défilement est calculé) ---------- */
 (function reveal(){
   if (!("IntersectionObserver" in window) || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
