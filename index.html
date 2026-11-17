@@ -1329,14 +1329,14 @@ var HOURS = (function hours(){
   layout();
 })();
 
-/* ---------- Défilement doux à la molette (ordinateur) ----------
-   Chaque cran de molette fait glisser la page au lieu de la faire sauter. Les pavés tactiles, déjà fluides,
-   le clavier, la barre de défilement et les téléphones gardent le défilement normal du navigateur. */
+/* ---------- Défilement doux à la molette et au pavé tactile (ordinateur) ----------
+   La page glisse au lieu de sauter. Le clavier, la barre de défilement et les téléphones
+   gardent le défilement normal du navigateur. */
 (function doux(){
   if (!window.matchMedia || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  var DOUX = 120;                             // ms : plus grand = glisse plus longtemps
-  var cible = 0, actuel = 0, raf = 0, lastT = 0;
+  var MOLETTE = 120, PAVE = 75;               // ms : plus grand = glisse plus longtemps (le pavé suit le doigt de plus près)
+  var DOUX = MOLETTE, cible = 0, actuel = 0, raf = 0, lastT = 0;
   function fin(){ return document.documentElement.scrollHeight - window.innerHeight; }
   function pas(now){
     raf = 0;
@@ -1351,7 +1351,7 @@ var HOURS = (function hours(){
     if (e.ctrlKey || e.shiftKey || e.defaultPrevented || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;   // zoom, défilement horizontal
     if (document.querySelector(".lightbox[open]")) return;
     var d = e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? window.innerHeight : 1);
-    if (!raf && e.deltaMode === 0 && Math.abs(d) < 50) return;   // pavé tactile : petits pas, déjà fluides
+    DOUX = e.deltaMode === 0 && Math.abs(d) < 50 ? PAVE : MOLETTE;   // petits pas continus = pavé tactile
     if (raf && performance.now() - lastT > 250){ stop(); return; }   // images bloquées (onglet en arrière-plan…) : le navigateur reprend la main
     e.preventDefault();
     if (!raf){ actuel = cible = window.scrollY; lastT = performance.now(); }
